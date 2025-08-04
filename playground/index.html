@@ -288,7 +288,7 @@
     <div class="header">
         <div class="container">
             <h1>D3 Charts Viz Library</h1>
-            <p>Interactive Playground - Beautiful Data Visualizations Made Easy</p>
+            <p class="subtitle">Interactive playground showcasing 10 different chart types</p>
         </div>
     </div>
 
@@ -458,6 +458,40 @@
                 <div class="code-example">
                     <button class="copy-btn" onclick="copyToClipboard(sankeyChartCode)">Copy</button>
                     <pre id="sankey-code"></pre>
+                </div>
+            </div>
+
+            <!-- Liquid Fill Chart -->
+            <div class="chart-card">
+                <div class="chart-title">💧 Liquid Fill Chart</div>
+                <div id="liquid-fill-chart" class="chart-container">
+                    <div class="loading"></div>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="updateLiquidFillChart()">🔄 Update Data</button>
+                    <button class="btn secondary" onclick="toggleLiquidFillMode()">🔄 Toggle Mode</button>
+                    <button class="btn secondary" onclick="showEconomicLiquidFill()">💰 Economic Data</button>
+                </div>
+                <div class="code-example">
+                    <button class="copy-btn" onclick="copyToClipboard(liquidFillChartCode)">Copy</button>
+                    <pre id="liquid-fill-code"></pre>
+                </div>
+            </div>
+
+            <!-- Radial Remainder Chart -->
+            <div class="chart-card">
+                <div class="chart-title">🌀 Radial Remainder Chart</div>
+                <div id="radial-remainder-chart" class="chart-container">
+                    <div class="loading"></div>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="updateRadialRemainderChart()">🔄 Update Data</button>
+                    <button class="btn secondary" onclick="showComplexRadialRemainder()">📈 Complex Growth</button>
+                    <button class="btn secondary" onclick="changeRadialSpirals()">🌀 Change Spirals</button>
+                </div>
+                <div class="code-example">
+                    <button class="copy-btn" onclick="copyToClipboard(radialRemainderChartCode)">Copy</button>
+                    <pre id="radial-remainder-code"></pre>
                 </div>
             </div>
         </div>

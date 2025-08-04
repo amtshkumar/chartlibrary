@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "d3": "^7.8.5",
-    "d3-charts-viz-library": "^1.0.3"
+    "d3-charts-viz-library": "file:../"
   },
   "devDependencies": {
     "vite": "^5.0.0"

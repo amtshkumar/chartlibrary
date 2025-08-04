@@ -8,6 +8,8 @@ export { default as AreaChart } from './charts/AreaChart.js';
 export { default as DonutChart } from './charts/DonutChart.js';
 export { default as Histogram } from './charts/Histogram.js';
 export { default as SankeyChart } from './charts/SankeyChart.js';
+export { default as LiquidFillChart } from './charts/LiquidFillChart.js';
+export { default as RadialRemainderChart } from './charts/RadialRemainderChart.js';
 
 // Utility functions
 export * from './utils/index.js';

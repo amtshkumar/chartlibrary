@@ -8,12 +8,14 @@ import {
   AreaChart, 
   Histogram,
   SankeyChart,
+  LiquidFillChart,
+  RadialRemainderChart,
   DataUtils,
   ColorUtils
 } from 'd3-charts-viz-library';
 
 // Global chart instances
-let barChart, lineChart, pieChart, donutChart, scatterPlot, areaChart, histogram, sankeyChart;
+let barChart, lineChart, pieChart, donutChart, scatterPlot, areaChart, histogram, sankeyChart, liquidFillChart, radialRemainderChart;
 let isMultiSeries = false;
 let showTrendLine = false;
 let showDensity = false;
@@ -168,6 +170,41 @@ const data = {
 
 sankeyChart.setData(data).render();`;
 
+const liquidFillChartCode = `const liquidFillChart = new LiquidFillChart('#liquid-fill-chart', {
+  width: 500,
+  height: 400,
+  dualGauge: true,
+  showConnectingFlow: true,
+  title: 'Tax Deduction Breakdown'
+});
+
+const data = [
+  { title: 'Non-deductible', value: 700000 },
+  { title: 'Deductible', value: 300000 }
+];
+
+liquidFillChart.setData(data).render();`;
+
+const radialRemainderChartCode = `const radialRemainderChart = new RadialRemainderChart('#radial-remainder-chart', {
+  width: 600,
+  height: 600,
+  spiralRotations: 2,
+  animationDuration: 3000,
+  title: 'Trust Remainder Growth'
+});
+
+const data = {
+  economicSchedule: [
+    { remainder: 1000000 },
+    { remainder: 1050000 },
+    { remainder: 1102500 },
+    { remainder: 1157625 },
+    { remainder: 1215506 }
+  ]
+};
+
+radialRemainderChart.setData(data).render();`;
+
 // Data generators
 function generateBarData() {
   const labels = ['Product A', 'Product B', 'Product C', 'Product D', 'Product E'];
@@ -293,6 +330,71 @@ function generateMultiSeriesData() {
   ];
 }
 
+function generateLiquidFillData() {
+  const total = 1000000;
+  const deductible = Math.floor(Math.random() * 400000) + 200000;
+  const nonDeductible = total - deductible;
+  
+  return [
+    { title: 'Non-deductible', value: nonDeductible },
+    { title: 'Deductible', value: deductible }
+  ];
+}
+
+function generateSingleLiquidFillData() {
+  const percentage = Math.floor(Math.random() * 80) + 20;
+  return [
+    { title: 'Progress', value: percentage }
+  ];
+}
+
+function generateEconomicLiquidFillData() {
+  const economicData = {
+    economicSchedule: [{ beginningPrincipal: 1000000 }],
+    charitDeduction: 350000
+  };
+  
+  return LiquidFillChart.fromEconomicData(economicData);
+}
+
+function generateRadialRemainderData() {
+  const years = 10;
+  const initialValue = 1000000;
+  const growthRate = 0.05;
+  
+  const economicSchedule = [];
+  for (let i = 0; i < years; i++) {
+    const remainder = initialValue * Math.pow(1 + growthRate, i);
+    economicSchedule.push({ remainder: Math.floor(remainder) });
+  }
+  
+  return { economicSchedule };
+}
+
+function generateComplexRadialRemainderData() {
+  const years = 15;
+  const initialValue = 1000000;
+  
+  const economicSchedule = [];
+  for (let i = 0; i < years; i++) {
+    // Variable growth rate with some volatility
+    const baseGrowth = 0.05;
+    const volatility = Math.sin(i * 0.5) * 0.02;
+    const growthRate = baseGrowth + volatility;
+    
+    const remainder = i === 0 ? initialValue : 
+      economicSchedule[i - 1].remainder * (1 + growthRate);
+    
+    economicSchedule.push({ 
+      remainder: Math.floor(remainder),
+      year: i + 1,
+      growthRate: growthRate
+    });
+  }
+  
+  return { economicSchedule };
+}
+
 // Initialize charts
 function initializeCharts() {
   // Bar Chart
@@ -373,6 +475,26 @@ function initializeCharts() {
   });
   sankeyChart.setData(generateSankeyData()).render();
 
+  // Liquid Fill Chart
+  liquidFillChart = new LiquidFillChart('#liquid-fill-chart', {
+    width: 500,
+    height: 400,
+    dualGauge: true,
+    showConnectingFlow: true,
+    title: 'Tax Deduction Breakdown'
+  });
+  liquidFillChart.setData(generateLiquidFillData()).render();
+
+  // Radial Remainder Chart
+  radialRemainderChart = new RadialRemainderChart('#radial-remainder-chart', {
+    width: 600,
+    height: 600,
+    spiralRotations: 2,
+    animationDuration: 3000,
+    title: 'Trust Remainder Growth'
+  });
+  radialRemainderChart.setData(generateRadialRemainderData()).render();
+
   // Update code examples
   updateCodeExamples();
 }
@@ -386,6 +508,8 @@ function updateCodeExamples() {
   document.getElementById('area-code').textContent = areaChartCode;
   document.getElementById('histogram-code').textContent = histogramCode;
   document.getElementById('sankey-code').textContent = sankeyChartCode;
+  document.getElementById('liquid-fill-code').textContent = liquidFillChartCode;
+  document.getElementById('radial-remainder-code').textContent = radialRemainderChartCode;
 }
 
 // Global functions for button interactions
@@ -540,6 +664,41 @@ window.toggleSankeyParticles = () => {
 
 window.showEconomicSankey = () => {
   sankeyChart.updateData(generateEconomicSankeyData());
+};
+
+window.updateLiquidFillChart = () => {
+  liquidFillChart.updateData(generateLiquidFillData());
+};
+
+window.toggleLiquidFillMode = () => {
+  const isDual = liquidFillChart.options.dualGauge;
+  liquidFillChart.setDualGauge(!isDual);
+  if (!isDual) {
+    liquidFillChart.updateData(generateLiquidFillData());
+  } else {
+    liquidFillChart.updateData(generateSingleLiquidFillData());
+  }
+  liquidFillChart.render();
+};
+
+window.showEconomicLiquidFill = () => {
+  liquidFillChart.setDualGauge(true);
+  liquidFillChart.updateData(generateEconomicLiquidFillData());
+};
+
+window.updateRadialRemainderChart = () => {
+  radialRemainderChart.updateData(generateRadialRemainderData());
+};
+
+window.showComplexRadialRemainder = () => {
+  radialRemainderChart.updateData(generateComplexRadialRemainderData());
+};
+
+window.changeRadialSpirals = () => {
+  const currentRotations = radialRemainderChart.options.spiralRotations;
+  const newRotations = currentRotations === 2 ? 3 : currentRotations === 3 ? 1 : 2;
+  radialRemainderChart.updateOptions({ spiralRotations: newRotations });
+  radialRemainderChart.render();
 };
 
 // Copy to clipboard function
