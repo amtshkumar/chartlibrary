@@ -73,16 +73,20 @@ class RadialTimelineChart extends BaseChart {
    * Create scales for the chart
    */
   createScales(data) {
-    const maxValue = d3.max(data, d => d.totalValue) || 1;
+    const maxValue = Math.max(1, d3.max(data, d => Math.abs(d.totalValue || 0)) || 1);
     const { radius } = this.calculateDimensions();
+    
+    // Ensure valid radius range
+    const minRadius = Math.max(0, this.options.innerRadius);
+    const maxRadius = Math.max(minRadius + 10, radius - Math.max(0, this.options.outerRadiusOffset));
 
     this.angleScale = d3.scaleLinear()
-      .domain([0, data.length])
+      .domain([0, Math.max(1, data.length)])
       .range([0, 2 * Math.PI]);
 
     this.radiusScale = d3.scaleLinear()
       .domain([0, maxValue])
-      .range([this.options.innerRadius, radius - this.options.outerRadiusOffset]);
+      .range([minRadius, maxRadius]);
 
     // Create color gradients
     this.primaryColorScale = d3.scaleLinear()
@@ -203,53 +207,59 @@ class RadialTimelineChart extends BaseChart {
       const startAngle = angle - segmentWidth / 2;
       const endAngle = angle + segmentWidth / 2;
 
-      const totalRadius = this.radiusScale(d.totalValue) - this.options.innerRadius;
-      const primaryRadius = this.radiusScale(d.primaryValue) - this.options.innerRadius;
-      const secondaryRadius = totalRadius - primaryRadius;
+      const totalRadius = Math.max(0, this.radiusScale(d.totalValue || 0) - this.options.innerRadius);
+      const primaryRadius = Math.max(0, this.radiusScale(d.primaryValue || 0) - this.options.innerRadius);
+      const secondaryRadius = Math.max(0, totalRadius - primaryRadius);
 
-      // Primary value arc (inner)
-      arcs.push({
-        type: 'primary',
-        year: d.year,
-        value: d.primaryValue,
-        innerRadius: this.options.innerRadius,
-        outerRadius: this.options.innerRadius + primaryRadius,
-        startAngle,
-        endAngle,
-        color: this.primaryColorScale(d.primaryValue),
-        data: d,
-        index: i
-      });
-
-      // Secondary value arc (outer)
-      arcs.push({
-        type: 'secondary',
-        year: d.year,
-        value: d.secondaryValue,
-        innerRadius: this.options.innerRadius + primaryRadius,
-        outerRadius: this.options.innerRadius + totalRadius,
-        startAngle,
-        endAngle,
-        color: this.secondaryColorScale(d.secondaryValue),
-        data: d,
-        index: i
-      });
-
-      // Tertiary value arc (if applicable)
-      if (d.tertiaryValue && d.tertiaryValue > 0) {
-        const tertiaryRadius = this.radiusScale(d.tertiaryValue) * 0.3; // Smaller scale
+      // Primary value arc (inner) - only add if valid
+      if (primaryRadius > 0 && isFinite(startAngle) && isFinite(endAngle)) {
         arcs.push({
-          type: 'tertiary',
+          type: 'primary',
           year: d.year,
-          value: d.tertiaryValue,
-          innerRadius: this.options.innerRadius + totalRadius + 5,
-          outerRadius: this.options.innerRadius + totalRadius + 5 + tertiaryRadius,
+          value: d.primaryValue,
+          innerRadius: this.options.innerRadius,
+          outerRadius: this.options.innerRadius + primaryRadius,
           startAngle,
           endAngle,
-          color: this.tertiaryColorScale(d.tertiaryValue),
+          color: this.primaryColorScale(d.primaryValue || 0),
           data: d,
           index: i
         });
+      }
+
+      // Secondary value arc (outer) - only add if valid
+      if (secondaryRadius > 0 && isFinite(startAngle) && isFinite(endAngle)) {
+        arcs.push({
+          type: 'secondary',
+          year: d.year,
+          value: d.secondaryValue,
+          innerRadius: this.options.innerRadius + primaryRadius,
+          outerRadius: this.options.innerRadius + totalRadius,
+          startAngle,
+          endAngle,
+          color: this.secondaryColorScale(d.secondaryValue || 0),
+          data: d,
+          index: i
+        });
+      }
+
+      // Tertiary value arc (if applicable)
+      if (d.tertiaryValue && d.tertiaryValue > 0) {
+        const tertiaryRadius = Math.max(0, this.radiusScale(d.tertiaryValue || 0) * 0.3); // Smaller scale
+        if (tertiaryRadius > 0 && isFinite(startAngle) && isFinite(endAngle)) {
+          arcs.push({
+            type: 'tertiary',
+            year: d.year,
+            value: d.tertiaryValue,
+            innerRadius: this.options.innerRadius + totalRadius + 5,
+            outerRadius: this.options.innerRadius + totalRadius + 5 + tertiaryRadius,
+            startAngle,
+            endAngle,
+            color: this.tertiaryColorScale(d.tertiaryValue || 0),
+            data: d,
+            index: i
+          });
+        }
       }
     });
 
@@ -261,10 +271,10 @@ class RadialTimelineChart extends BaseChart {
    */
   createArcGenerator() {
     return d3.arc()
-      .innerRadius(d => d.innerRadius)
-      .outerRadius(d => d.outerRadius)
-      .startAngle(d => d.startAngle)
-      .endAngle(d => d.endAngle)
+      .innerRadius(d => Math.max(0, d.innerRadius || 0))
+      .outerRadius(d => Math.max(0, d.outerRadius || 0))
+      .startAngle(d => isFinite(d.startAngle) ? d.startAngle : 0)
+      .endAngle(d => isFinite(d.endAngle) ? d.endAngle : 0)
       .cornerRadius(this.options.cornerRadius);
   }
 

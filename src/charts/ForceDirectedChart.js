@@ -635,14 +635,29 @@ class ForceDirectedChart extends BaseChart {
     this.simulation.on('tick', () => {
       // Update curved link paths
       linkPaths.attr('d', d => {
-        const dx = d.target.x - d.source.x;
-        const dy = d.target.y - d.source.y;
-        const dr = Math.sqrt(dx * dx + dy * dy) * 0.3;
+        // Validate coordinates
+        const sourceX = isFinite(d.source.x) ? d.source.x : 0;
+        const sourceY = isFinite(d.source.y) ? d.source.y : 0;
+        const targetX = isFinite(d.target.x) ? d.target.x : 0;
+        const targetY = isFinite(d.target.y) ? d.target.y : 0;
         
-        return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
+        const dx = targetX - sourceX;
+        const dy = targetY - sourceY;
+        const dr = Math.max(1, Math.sqrt(dx * dx + dy * dy) * 0.3);
+        
+        // Ensure all values are finite numbers
+        if (!isFinite(dr) || !isFinite(sourceX) || !isFinite(sourceY) || !isFinite(targetX) || !isFinite(targetY)) {
+          return `M0,0L0,0`; // Return a simple valid path if coordinates are invalid
+        }
+        
+        return `M${sourceX},${sourceY}A${dr},${dr} 0 0,1 ${targetX},${targetY}`;
       });
 
-      node.attr('transform', d => `translate(${d.x},${d.y})`);
+      node.attr('transform', d => {
+        const x = isFinite(d.x) ? d.x : 0;
+        const y = isFinite(d.y) ? d.y : 0;
+        return `translate(${x},${y})`;
+      });
     });
 
     // Create legend

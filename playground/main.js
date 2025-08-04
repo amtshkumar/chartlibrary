@@ -14,12 +14,13 @@ import {
   ForceDirectedChart,
   AnimatedBumpChart,
   RadialTimelineChart,
+  FlowContainersChart,
   DataUtils,
   ColorUtils
 } from 'd3-charts-viz-library';
 
 // Global chart instances
-let barChart, lineChart, pieChart, donutChart, scatterPlot, areaChart, histogram, sankeyChart, liquidFillChart, radialRemainderChart, chordDiagramChart, forceDirectedChart, animatedBumpChart, radialTimelineChart;
+let barChart, lineChart, pieChart, donutChart, scatterPlot, areaChart, histogram, sankeyChart, liquidFillChart, radialRemainderChart, chordDiagramChart, forceDirectedChart, animatedBumpChart, radialTimelineChart, flowContainersChart;
 let isMultiSeries = false;
 let showTrendLine = false;
 let showDensity = false;
@@ -310,6 +311,29 @@ const data = {
 };
 
 radialTimelineChart.setData(data).render();`;
+
+const flowContainersChartCode = `const flowContainersChart = new FlowContainersChart('#flow-containers-chart', {
+  width: 800,
+  height: 600,
+  animationDuration: 2000,
+  showParticles: true,
+  showBubbles: true,
+  containerSpacing: 80,
+  liquidColor: '#3498db'
+});
+
+const data = {
+  containers: [
+    { year: 2024, amount: 120000, fillPercentage: 0.65, label: 'Year 2024' },
+    { year: 2025, amount: 135000, fillPercentage: 0.72, label: 'Year 2025' },
+    { year: 2026, amount: 148000, fillPercentage: 0.58, label: 'Year 2026' },
+    { year: 2027, amount: 162000, fillPercentage: 0.81, label: 'Year 2027' }
+  ],
+  totalAmount: 565000,
+  title: 'Financial Flow Containers'
+};
+
+flowContainersChart.setData(data).render();`;
 
 // Data generators
 function generateBarData() {
@@ -630,6 +654,32 @@ function generateRadialTimelineData() {
   };
 }
 
+function generateFlowContainersData() {
+  const years = 8;
+  const baseAmount = 100000;
+  
+  const containers = [];
+  for (let i = 0; i < years; i++) {
+    const year = 2024 + i;
+    const amount = baseAmount * (1 + Math.random() * 0.5); // Random growth
+    const fillPercentage = 0.3 + Math.random() * 0.6; // 30-90% fill
+    
+    containers.push({
+      year,
+      amount: Math.floor(amount),
+      fillPercentage,
+      label: `Year ${year}`,
+      category: i < 4 ? 'Growth Phase' : 'Maturity Phase'
+    });
+  }
+  
+  return {
+    containers,
+    totalAmount: containers.reduce((sum, c) => sum + c.amount, 0),
+    title: 'Financial Flow Containers'
+  };
+}
+
 // Initialize charts
 function initializeCharts() {
   // Bar Chart
@@ -778,6 +828,18 @@ function initializeCharts() {
   });
   radialTimelineChart.setData(generateRadialTimelineData()).render();
 
+  // Flow Containers Chart
+  flowContainersChart = new FlowContainersChart('#flow-containers-chart', {
+    width: 800,
+    height: 600,
+    animationDuration: 2000,
+    showParticles: true,
+    showBubbles: true,
+    containerSpacing: 80,
+    liquidColor: '#3498db'
+  });
+  flowContainersChart.setData(generateFlowContainersData()).render();
+
   // Update code examples
   updateCodeExamples();
 }
@@ -797,6 +859,7 @@ function updateCodeExamples() {
   document.getElementById('force-directed-code').textContent = forceDirectedChartCode;
   document.getElementById('animated-bump-code').textContent = animatedBumpChartCode;
   document.getElementById('radial-timeline-code').textContent = radialTimelineChartCode;
+  document.getElementById('flow-containers-code').textContent = flowContainersChartCode;
 }
 
 // Global functions for button interactions
@@ -1049,6 +1112,26 @@ window.toggleRadialLabels = () => {
   const currentLabels = radialTimelineChart.options.showYearLabels;
   radialTimelineChart.updateOptions({ showYearLabels: !currentLabels });
   radialTimelineChart.render();
+};
+
+window.updateFlowContainersChart = () => {
+  flowContainersChart.updateData(generateFlowContainersData());
+};
+
+window.toggleFlowParticles = () => {
+  const currentParticles = flowContainersChart.options.showParticles;
+  flowContainersChart.updateOptions({ showParticles: !currentParticles });
+  flowContainersChart.render();
+};
+
+window.toggleFlowBubbles = () => {
+  const currentBubbles = flowContainersChart.options.showBubbles;
+  flowContainersChart.updateOptions({ showBubbles: !currentBubbles });
+  flowContainersChart.render();
+};
+
+window.startFlowAnimation = () => {
+  flowContainersChart.startAnimation();
 };
 
 // Copy to clipboard function

@@ -14,6 +14,7 @@ export { default as ChordDiagramChart } from './charts/ChordDiagramChart.js';
 export { default as ForceDirectedChart } from './charts/ForceDirectedChart.js';
 export { default as AnimatedBumpChart } from './charts/AnimatedBumpChart.js';
 export { default as RadialTimelineChart } from './charts/RadialTimelineChart.js';
+export { default as FlowContainersChart } from './charts/FlowContainersChart.js';
 
 // Utility functions
 export * from './utils/index.js';
