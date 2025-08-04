@@ -70,36 +70,62 @@ class RadialTimelineChart extends BaseChart {
   }
 
   /**
-   * Create scales for the chart
+   * Create scales for the chart with comprehensive validation
    */
   createScales(data) {
-    const maxValue = Math.max(1, d3.max(data, d => Math.abs(d.totalValue || 0)) || 1);
+    // Validate input data and calculate max value
+    const validData = data.filter(d => d && typeof d === 'object');
+    const values = validData.map(d => Math.abs(d.totalValue || 0)).filter(v => isFinite(v));
+    const maxValue = Math.max(1, d3.max(values) || 1);
+    
     const { radius } = this.calculateDimensions();
     
-    // Ensure valid radius range
-    const minRadius = Math.max(0, this.options.innerRadius);
-    const maxRadius = Math.max(minRadius + 10, radius - Math.max(0, this.options.outerRadiusOffset));
+    // Ensure valid radius range with comprehensive validation
+    const innerRadius = Math.max(0, this.options.innerRadius || 0);
+    const outerRadiusOffset = Math.max(0, this.options.outerRadiusOffset || 0);
+    const minRadius = innerRadius;
+    const maxRadius = Math.max(minRadius + 20, radius - outerRadiusOffset);
+    
+    // Validate radius values
+    if (!isFinite(minRadius) || !isFinite(maxRadius) || maxRadius <= minRadius) {
+      console.warn('Invalid radius values, using defaults:', { minRadius, maxRadius });
+      const fallbackMin = 40;
+      const fallbackMax = Math.max(fallbackMin + 20, 100);
+      this.radiusScale = d3.scaleLinear().domain([0, maxValue]).range([fallbackMin, fallbackMax]);
+    } else {
+      this.radiusScale = d3.scaleLinear().domain([0, maxValue]).range([minRadius, maxRadius]);
+    }
 
+    // Create angle scale with validation
+    const dataLength = Math.max(1, validData.length);
     this.angleScale = d3.scaleLinear()
-      .domain([0, Math.max(1, data.length)])
+      .domain([0, dataLength])
       .range([0, 2 * Math.PI]);
 
-    this.radiusScale = d3.scaleLinear()
-      .domain([0, maxValue])
-      .range([minRadius, maxRadius]);
+    // Create color gradients with safe color handling
+    try {
+      const primaryColor = this.colorScale(0) || '#22c55e';
+      const secondaryColor = this.colorScale(1) || '#3b82f6';
+      const tertiaryColor = this.colorScale(2) || '#f59e0b';
+      
+      this.primaryColorScale = d3.scaleLinear()
+        .domain([0, maxValue])
+        .range([d3.color(primaryColor)?.brighter(0.3)?.toString() || primaryColor, primaryColor]);
 
-    // Create color gradients
-    this.primaryColorScale = d3.scaleLinear()
-      .domain([0, maxValue])
-      .range([d3.color(this.colorScale(0)).brighter(0.3).toString(), this.colorScale(0)]);
+      this.secondaryColorScale = d3.scaleLinear()
+        .domain([0, maxValue])
+        .range([d3.color(secondaryColor)?.brighter(0.3)?.toString() || secondaryColor, secondaryColor]);
 
-    this.secondaryColorScale = d3.scaleLinear()
-      .domain([0, maxValue])
-      .range([d3.color(this.colorScale(1)).brighter(0.3).toString(), this.colorScale(1)]);
-
-    this.tertiaryColorScale = d3.scaleLinear()
-      .domain([0, maxValue])
-      .range([d3.color(this.colorScale(2)).brighter(0.3).toString(), this.colorScale(2)]);
+      this.tertiaryColorScale = d3.scaleLinear()
+        .domain([0, maxValue])
+        .range([d3.color(tertiaryColor)?.brighter(0.3)?.toString() || tertiaryColor, tertiaryColor]);
+    } catch (e) {
+      console.warn('Color scale creation failed, using fallbacks:', e);
+      // Fallback color scales
+      this.primaryColorScale = d3.scaleLinear().domain([0, maxValue]).range(['#22c55e', '#16a34a']);
+      this.secondaryColorScale = d3.scaleLinear().domain([0, maxValue]).range(['#3b82f6', '#2563eb']);
+      this.tertiaryColorScale = d3.scaleLinear().domain([0, maxValue]).range(['#f59e0b', '#d97706']);
+    }
   }
 
   /**
@@ -196,90 +222,160 @@ class RadialTimelineChart extends BaseChart {
   }
 
   /**
-   * Process data into arc segments
+   * Process data into arc segments with comprehensive validation
    */
   processArcs(data) {
     const arcs = [];
     
     data.forEach((d, i) => {
+      // Validate input data
+      const totalValue = isFinite(d.totalValue) ? Math.abs(d.totalValue || 0) : 0;
+      const primaryValue = isFinite(d.primaryValue) ? Math.abs(d.primaryValue || 0) : 0;
+      const secondaryValue = isFinite(d.secondaryValue) ? Math.abs(d.secondaryValue || 0) : 0;
+      const tertiaryValue = isFinite(d.tertiaryValue) ? Math.abs(d.tertiaryValue || 0) : 0;
+      
       const angle = this.angleScale(i) - Math.PI / 2;
-      const segmentWidth = (2 * Math.PI) / data.length * this.options.segmentWidthRatio;
+      const segmentWidth = (2 * Math.PI) / Math.max(1, data.length) * this.options.segmentWidthRatio;
       const startAngle = angle - segmentWidth / 2;
       const endAngle = angle + segmentWidth / 2;
 
-      const totalRadius = Math.max(0, this.radiusScale(d.totalValue || 0) - this.options.innerRadius);
-      const primaryRadius = Math.max(0, this.radiusScale(d.primaryValue || 0) - this.options.innerRadius);
+      // Validate angles
+      if (!isFinite(startAngle) || !isFinite(endAngle) || startAngle >= endAngle) {
+        console.warn(`Invalid angles for arc ${i}:`, { startAngle, endAngle });
+        return; // Skip this arc
+      }
+
+      // Calculate radii with validation
+      const totalRadiusRaw = this.radiusScale(totalValue);
+      const primaryRadiusRaw = this.radiusScale(primaryValue);
+      
+      if (!isFinite(totalRadiusRaw) || !isFinite(primaryRadiusRaw)) {
+        console.warn(`Invalid radius values for arc ${i}:`, { totalRadiusRaw, primaryRadiusRaw });
+        return; // Skip this arc
+      }
+      
+      const totalRadius = Math.max(0, totalRadiusRaw - this.options.innerRadius);
+      const primaryRadius = Math.max(0, primaryRadiusRaw - this.options.innerRadius);
       const secondaryRadius = Math.max(0, totalRadius - primaryRadius);
 
       // Primary value arc (inner) - only add if valid
-      if (primaryRadius > 0 && isFinite(startAngle) && isFinite(endAngle)) {
+      if (primaryRadius > 0) {
+        const innerRadius = Math.max(0, this.options.innerRadius);
+        const outerRadius = Math.max(innerRadius + 1, innerRadius + primaryRadius);
+        
         arcs.push({
           type: 'primary',
           year: d.year,
-          value: d.primaryValue,
-          innerRadius: this.options.innerRadius,
-          outerRadius: this.options.innerRadius + primaryRadius,
+          value: primaryValue,
+          innerRadius,
+          outerRadius,
           startAngle,
           endAngle,
-          color: this.primaryColorScale(d.primaryValue || 0),
+          color: this.primaryColorScale(primaryValue),
           data: d,
           index: i
         });
       }
 
       // Secondary value arc (outer) - only add if valid
-      if (secondaryRadius > 0 && isFinite(startAngle) && isFinite(endAngle)) {
+      if (secondaryRadius > 0) {
+        const innerRadius = Math.max(0, this.options.innerRadius + primaryRadius);
+        const outerRadius = Math.max(innerRadius + 1, this.options.innerRadius + totalRadius);
+        
         arcs.push({
           type: 'secondary',
           year: d.year,
-          value: d.secondaryValue,
-          innerRadius: this.options.innerRadius + primaryRadius,
-          outerRadius: this.options.innerRadius + totalRadius,
+          value: secondaryValue,
+          innerRadius,
+          outerRadius,
           startAngle,
           endAngle,
-          color: this.secondaryColorScale(d.secondaryValue || 0),
+          color: this.secondaryColorScale(secondaryValue),
           data: d,
           index: i
         });
       }
 
       // Tertiary value arc (if applicable)
-      if (d.tertiaryValue && d.tertiaryValue > 0) {
-        const tertiaryRadius = Math.max(0, this.radiusScale(d.tertiaryValue || 0) * 0.3); // Smaller scale
-        if (tertiaryRadius > 0 && isFinite(startAngle) && isFinite(endAngle)) {
-          arcs.push({
-            type: 'tertiary',
-            year: d.year,
-            value: d.tertiaryValue,
-            innerRadius: this.options.innerRadius + totalRadius + 5,
-            outerRadius: this.options.innerRadius + totalRadius + 5 + tertiaryRadius,
-            startAngle,
-            endAngle,
-            color: this.tertiaryColorScale(d.tertiaryValue || 0),
-            data: d,
-            index: i
-          });
+      if (tertiaryValue > 0) {
+        const tertiaryRadiusRaw = this.radiusScale(tertiaryValue) * 0.3; // Smaller scale
+        
+        if (isFinite(tertiaryRadiusRaw)) {
+          const tertiaryRadius = Math.max(0, tertiaryRadiusRaw);
+          
+          if (tertiaryRadius > 0) {
+            const innerRadius = Math.max(0, this.options.innerRadius + totalRadius + 5);
+            const outerRadius = Math.max(innerRadius + 1, innerRadius + tertiaryRadius);
+            
+            arcs.push({
+              type: 'tertiary',
+              year: d.year,
+              value: tertiaryValue,
+              innerRadius,
+              outerRadius,
+              startAngle,
+              endAngle,
+              color: this.tertiaryColorScale(tertiaryValue),
+              data: d,
+              index: i
+            });
+          }
         }
       }
     });
 
-    return arcs;
+    // Final validation of all arcs
+    const validArcs = arcs.filter(arc => {
+      const isValid = isFinite(arc.innerRadius) && 
+                     isFinite(arc.outerRadius) && 
+                     isFinite(arc.startAngle) && 
+                     isFinite(arc.endAngle) &&
+                     arc.innerRadius >= 0 &&
+                     arc.outerRadius > arc.innerRadius &&
+                     arc.startAngle < arc.endAngle;
+      
+      if (!isValid) {
+        console.warn('Filtered out invalid arc:', arc);
+      }
+      
+      return isValid;
+    });
+
+    return validArcs;
   }
 
   /**
-   * Create arc generator
+   * Create arc generator with comprehensive validation
    */
   createArcGenerator() {
     return d3.arc()
-      .innerRadius(d => Math.max(0, d.innerRadius || 0))
-      .outerRadius(d => Math.max(0, d.outerRadius || 0))
-      .startAngle(d => isFinite(d.startAngle) ? d.startAngle : 0)
-      .endAngle(d => isFinite(d.endAngle) ? d.endAngle : 0)
-      .cornerRadius(this.options.cornerRadius);
+      .innerRadius(d => {
+        const value = d.innerRadius || 0;
+        return isFinite(value) && value >= 0 ? Math.max(0, value) : 0;
+      })
+      .outerRadius(d => {
+        const value = d.outerRadius || 0;
+        const innerValue = d.innerRadius || 0;
+        const validValue = isFinite(value) && value >= 0 ? Math.max(0, value) : 0;
+        const validInner = isFinite(innerValue) && innerValue >= 0 ? Math.max(0, innerValue) : 0;
+        return Math.max(validInner + 1, validValue); // Ensure outer > inner
+      })
+      .startAngle(d => {
+        const value = d.startAngle;
+        return isFinite(value) ? value : 0;
+      })
+      .endAngle(d => {
+        const value = d.endAngle;
+        return isFinite(value) ? value : 0;
+      })
+      .cornerRadius(d => {
+        const cornerRadius = this.options.cornerRadius || 0;
+        return isFinite(cornerRadius) && cornerRadius >= 0 ? cornerRadius : 0;
+      });
   }
 
   /**
-   * Draw animated arcs
+   * Draw animated arcs with safe transitions
    */
   drawArcs(arcs, mainGroup) {
     const arcGenerator = this.createArcGenerator();
@@ -295,17 +391,54 @@ class RadialTimelineChart extends BaseChart {
       .style("cursor", "pointer")
       .style("opacity", d => this.hoveredYear && this.hoveredYear !== d.year ? 0.3 : 1)
       .attr("d", d => {
-        // Start with zero radius for animation
-        const startArc = { ...d, outerRadius: d.innerRadius };
-        return arcGenerator(startArc);
+        // Start with zero radius for animation - ensure all values are valid
+        const startArc = {
+          ...d,
+          outerRadius: Math.max(0, d.innerRadius || 0),
+          innerRadius: Math.max(0, d.innerRadius || 0),
+          startAngle: isFinite(d.startAngle) ? d.startAngle : 0,
+          endAngle: isFinite(d.endAngle) ? d.endAngle : 0
+        };
+        try {
+          return arcGenerator(startArc) || 'M0,0';
+        } catch (e) {
+          console.warn('Arc generation failed:', e);
+          return 'M0,0';
+        }
       });
 
-    // Animate arcs
+    // Animate arcs with safe interpolation
     arcPaths
       .transition()
       .delay(d => d.index * this.options.animationDelay + 300)
       .duration(this.options.animationDuration)
-      .attr("d", arcGenerator);
+      .attrTween('d', function(d) {
+        const node = this;
+        const startRadius = Math.max(0, d.innerRadius || 0);
+        const endRadius = Math.max(startRadius + 1, d.outerRadius || 0);
+        
+        // Create interpolator for radius
+        const radiusInterpolator = d3.interpolateNumber(startRadius, endRadius);
+        
+        return function(t) {
+          const currentRadius = radiusInterpolator(t);
+          const safeArc = {
+            ...d,
+            innerRadius: Math.max(0, d.innerRadius || 0),
+            outerRadius: Math.max(d.innerRadius + 1, currentRadius),
+            startAngle: isFinite(d.startAngle) ? d.startAngle : 0,
+            endAngle: isFinite(d.endAngle) ? d.endAngle : 0
+          };
+          
+          try {
+            const path = arcGenerator(safeArc);
+            return path || 'M0,0';
+          } catch (e) {
+            console.warn('Arc animation failed:', e);
+            return 'M0,0';
+          }
+        };
+      });
 
     // Add hover interactions
     arcPaths
