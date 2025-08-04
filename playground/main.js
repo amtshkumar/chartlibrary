@@ -13,12 +13,13 @@ import {
   ChordDiagramChart,
   ForceDirectedChart,
   AnimatedBumpChart,
+  RadialTimelineChart,
   DataUtils,
   ColorUtils
 } from 'd3-charts-viz-library';
 
 // Global chart instances
-let barChart, lineChart, pieChart, donutChart, scatterPlot, areaChart, histogram, sankeyChart, liquidFillChart, radialRemainderChart, chordDiagramChart, forceDirectedChart, animatedBumpChart;
+let barChart, lineChart, pieChart, donutChart, scatterPlot, areaChart, histogram, sankeyChart, liquidFillChart, radialRemainderChart, chordDiagramChart, forceDirectedChart, animatedBumpChart, radialTimelineChart;
 let isMultiSeries = false;
 let showTrendLine = false;
 let showDensity = false;
@@ -279,6 +280,36 @@ const data = {
 };
 
 animatedBumpChart.setData(data).render();`;
+
+const radialTimelineChartCode = `const radialTimelineChart = new RadialTimelineChart('#radial-timeline-chart', {
+  width: 500,
+  height: 500,
+  animationDuration: 1000,
+  animationDelay: 100,
+  innerRadius: 40,
+  cornerRadius: 2,
+  showGridLines: true,
+  showYearLabels: true
+});
+
+const data = {
+  economicSchedule: [
+    { remainder: 1000000, distribution: 50000 },
+    { remainder: 1050000, distribution: 52500 },
+    { remainder: 1102500, distribution: 55125 },
+    { remainder: 1157625, distribution: 57881 },
+    { remainder: 1215506, distribution: 60775 },
+    { remainder: 1276281, distribution: 63814 },
+    { remainder: 1340095, distribution: 67005 },
+    { remainder: 1407100, distribution: 70355 },
+    { remainder: 1477455, distribution: 73873 },
+    { remainder: 1551328, distribution: 77566 },
+    { remainder: 1628894, distribution: 81445 },
+    { remainder: 1710339, distribution: 85517 }
+  ]
+};
+
+radialTimelineChart.setData(data).render();`;
 
 // Data generators
 function generateBarData() {
@@ -575,6 +606,30 @@ function generateAnimatedBumpData() {
   };
 }
 
+function generateRadialTimelineData() {
+  const years = 12;
+  const initialValue = 1000000;
+  const baseDistribution = 50000;
+  
+  const economicSchedule = [];
+  for (let i = 0; i < years; i++) {
+    const remainder = initialValue * Math.pow(1.05, i);
+    const distribution = baseDistribution * (1 + i * 0.05);
+    const income = distribution * 0.75; // Assume 75% of distribution is income
+    
+    economicSchedule.push({ 
+      remainder: Math.floor(remainder),
+      distribution: Math.floor(distribution),
+      income: Math.floor(income),
+      year: i + 1
+    });
+  }
+  
+  return {
+    economicSchedule
+  };
+}
+
 // Initialize charts
 function initializeCharts() {
   // Bar Chart
@@ -709,6 +764,20 @@ function initializeCharts() {
   });
   animatedBumpChart.setData(generateAnimatedBumpData()).render();
 
+  // Radial Timeline Chart
+  radialTimelineChart = new RadialTimelineChart('#radial-timeline-chart', {
+    width: 500,
+    height: 500,
+    animationDuration: 1000,
+    animationDelay: 100,
+    innerRadius: 40,
+    cornerRadius: 2,
+    showGridLines: true,
+    showYearLabels: true,
+    centerLabelText: 'Timeline'
+  });
+  radialTimelineChart.setData(generateRadialTimelineData()).render();
+
   // Update code examples
   updateCodeExamples();
 }
@@ -727,6 +796,7 @@ function updateCodeExamples() {
   document.getElementById('chord-diagram-code').textContent = chordDiagramChartCode;
   document.getElementById('force-directed-code').textContent = forceDirectedChartCode;
   document.getElementById('animated-bump-code').textContent = animatedBumpChartCode;
+  document.getElementById('radial-timeline-code').textContent = radialTimelineChartCode;
 }
 
 // Global functions for button interactions
@@ -963,6 +1033,22 @@ window.toggleBumpBars = () => {
   const currentBars = animatedBumpChart.options.showDistributionBars;
   animatedBumpChart.updateOptions({ showDistributionBars: !currentBars });
   animatedBumpChart.render();
+};
+
+window.updateRadialTimelineChart = () => {
+  radialTimelineChart.updateData(generateRadialTimelineData());
+};
+
+window.toggleRadialGrid = () => {
+  const currentGrid = radialTimelineChart.options.showGridLines;
+  radialTimelineChart.updateOptions({ showGridLines: !currentGrid });
+  radialTimelineChart.render();
+};
+
+window.toggleRadialLabels = () => {
+  const currentLabels = radialTimelineChart.options.showYearLabels;
+  radialTimelineChart.updateOptions({ showYearLabels: !currentLabels });
+  radialTimelineChart.render();
 };
 
 // Copy to clipboard function

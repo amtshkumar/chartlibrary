@@ -13,6 +13,7 @@ export { default as RadialRemainderChart } from './charts/RadialRemainderChart.j
 export { default as ChordDiagramChart } from './charts/ChordDiagramChart.js';
 export { default as ForceDirectedChart } from './charts/ForceDirectedChart.js';
 export { default as AnimatedBumpChart } from './charts/AnimatedBumpChart.js';
+export { default as RadialTimelineChart } from './charts/RadialTimelineChart.js';
 
 // Utility functions
 export * from './utils/index.js';
