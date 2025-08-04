@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3 Charts Viz Library - Interactive Playground</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #3498db, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .install-section {
+            background: rgba(255, 255, 255, 0.9);
+            margin: 30px auto;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            max-width: 800px;
+        }
+
+        .install-code {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 10px 0;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .copy-btn:hover {
+            background: #2980b9;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+            gap: 30px;
+            padding: 30px 0;
+        }
+
+        .chart-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .chart-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .chart-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+            position: relative;
+        }
+
+        .chart-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(45deg, #3498db, #9b59b6);
+            border-radius: 2px;
+        }
+
+        .chart-container {
+            margin: 20px 0;
+            text-align: center;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn.secondary {
+            background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+            box-shadow: 0 4px 15px rgba(149, 165, 166, 0.3);
+        }
+
+        .btn.secondary:hover {
+            box-shadow: 0 6px 20px rgba(149, 165, 166, 0.4);
+        }
+
+        .code-example {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-example pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .stats-panel {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+            background: linear-gradient(45deg, #ecf0f1, #bdc3c7);
+            border-radius: 8px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        .footer {
+            background: rgba(44, 62, 80, 0.9);
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+        }
+
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .chart-card {
+                padding: 20px;
+            }
+        }
+
+        /* Tooltip styles */
+        .d3-tooltip {
+            position: absolute;
+            visibility: hidden;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            pointer-events: none;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            backdrop-filter: blur(5px);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>D3 Charts Viz Library</h1>
+            <p>Interactive Playground - Beautiful Data Visualizations Made Easy</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="install-section">
+            <h3 style="margin-bottom: 15px; color: #2c3e50;">📦 Installation</h3>
+            <div class="install-code">
+                <button class="copy-btn" onclick="copyToClipboard('npm install d3-charts-viz-library')">Copy</button>
+                npm install d3-charts-viz-library
+            </div>
+            <div class="install-code">
+                <button class="copy-btn" onclick="copyToClipboard(importCode)">Copy</button>
+                <pre>import { BarChart, LineChart, PieChart } from 'd3-charts-viz-library';</pre>
+            </div>
+        </div>
+
+        <div class="stats-panel">
+            <div class="stat-item">
+                <div class="stat-value">8</div>
+                <div class="stat-label">Chart Types</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">57KB</div>
+                <div class="stat-label">Package Size</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">100%</div>
+                <div class="stat-label">Interactive</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">D3 v7</div>
+                <div class="stat-label">Powered by</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <!-- Bar Chart -->
+            <div class="chart-card">
+                <div class="chart-title">📊 Bar Chart</div>
+                <div id="bar-chart" class="chart-container">
+                    <div class="loading"></div>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="updateBarChart()">🔄 Update Data</button>
+                    <button class="btn secondary" onclick="toggleBarOrientation()">🔄 Toggle Orientation</button>
+                    <button class="btn secondary" onclick="toggleBarValues()">🏷️ Toggle Values</button>
+                </div>
+                <div class="code-example">
+                    <button class="copy-btn" onclick="copyToClipboard(barChartCode)">Copy</button>
+                    <pre id="bar-code"></pre>
+                </div>
+            </div>
+
+            <!-- Line Chart -->
+            <div class="chart-card">
+                <div class="chart-title">📈 Line Chart</div>
+                <div id="line-chart" class="chart-container">
+                    <div class="loading"></div>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="updateLineChart()">🔄 Update Data</button>
+                    <button class="btn secondary" onclick="toggleLinePoints()">⚪ Toggle Points</button>
+                    <button class="btn secondary" onclick="addLineSeries()">➕ Multi-Series</button>
+                </div>
+                <div class="code-example">
+                    <button class="copy-btn" onclick="copyToClipboard(lineChartCode)">Copy</button>
+                    <pre id="line-code"></pre>
+                </div>
+            </div>
+
+            <!-- Pie Chart -->
+            <div class="chart-card">
+                <div class="chart-title">🥧 Pie Chart</div>
+                <div id="pie-chart" class="chart-container">
+                    <div class="loading"></div>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="updatePieChart()">🔄 Update Data</button>
+                    <button class="btn secondary" onclick="explodePieSlice()">💥 Explode Slice</button>
+                    <button class="btn secondary" onclick="resetPieSlices()">🔄 Reset</button>
+                </div>
+                <div class="code-example">
+                    <button class="copy-btn" onclick="copyToClipboard(pieChartCode)">Copy</button>
+                    <pre id="pie-code"></pre>
+                </div>
+            </div>
+
+            <!-- Donut Chart -->
+            <div class="chart-card">
+                <div class="chart-title">🍩 Donut Chart</div>
+                <div id="donut-chart" class="chart-container">
+                    <div class="loading"></div>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="updateDonutChart()">🔄 Update Data</button>
+                    <button class="btn secondary" onclick="showProgress()">📊 Progress Mode</button>
+                    <button class="btn secondary" onclick="animateProgress()">🎬 Animate Progress</button>
+                </div>
+                <div class="code-example">
+                    <button class="copy-btn" onclick="copyToClipboard(donutChartCode)">Copy</button>
+                    <pre id="donut-code"></pre>
+                </div>
+            </div>
+
+            <!-- Scatter Plot -->
+            <div class="chart-card">
+                <div class="chart-title">⚪ Scatter Plot</div>
+                <div id="scatter-plot" class="chart-container">
+                    <div class="loading"></div>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="updateScatterPlot()">🔄 Update Data</button>
+                    <button class="btn secondary" onclick="toggleTrendLine()">📈 Toggle Trend Line</button>
+                    <button class="btn secondary" onclick="showBubbleChart()">🫧 Bubble Chart</button>
+                </div>
+                <div class="code-example">
+                    <button class="copy-btn" onclick="copyToClipboard(scatterPlotCode)">Copy</button>
+                    <pre id="scatter-code"></pre>
+                </div>
+            </div>
+
+            <!-- Area Chart -->
+            <div class="chart-card">
+                <div class="chart-title">🏔️ Area Chart</div>
+                <div id="area-chart" class="chart-container">
+                    <div class="loading"></div>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="updateAreaChart()">🔄 Update Data</button>
+                    <button class="btn secondary" onclick="toggleAreaLine()">📈 Toggle Line</button>
+                    <button class="btn secondary" onclick="showStackedArea()">📚 Stacked Area</button>
+                </div>
+                <div class="code-example">
+                    <button class="copy-btn" onclick="copyToClipboard(areaChartCode)">Copy</button>
+                    <pre id="area-code"></pre>
+                </div>
+            </div>
+
+            <!-- Histogram -->
+            <div class="chart-card">
+                <div class="chart-title">📊 Histogram</div>
+                <div id="histogram" class="chart-container">
+                    <div class="loading"></div>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="updateHistogram()">🔄 Update Data</button>
+                    <button class="btn secondary" onclick="toggleDensity()">📈 Toggle Density</button>
+                    <button class="btn secondary" onclick="changeBins()">🔢 Change Bins</button>
+                </div>
+                <div class="code-example">
+                    <button class="copy-btn" onclick="copyToClipboard(histogramCode)">Copy</button>
+                    <pre id="histogram-code"></pre>
+                </div>
+            </div>
+
+            <!-- Sankey Chart -->
+            <div class="chart-card">
+                <div class="chart-title">🌊 Sankey Chart</div>
+                <div id="sankey-chart" class="chart-container">
+                    <div class="loading"></div>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="updateSankeyChart()">🔄 Update Data</button>
+                    <button class="btn secondary" onclick="toggleSankeyParticles()">✨ Toggle Particles</button>
+                    <button class="btn secondary" onclick="showEconomicSankey()">💰 Economic Flow</button>
+                </div>
+                <div class="code-example">
+                    <button class="copy-btn" onclick="copyToClipboard(sankeyChartCode)">Copy</button>
+                    <pre id="sankey-code"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <p>Built with ❤️ using <a href="https://www.npmjs.com/package/d3-charts-viz-library" target="_blank">d3-charts-viz-library</a></p>
+            <p>Powered by D3.js • Open Source • MIT License</p>
+        </div>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+</body>
+</html>

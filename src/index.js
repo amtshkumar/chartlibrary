@@ -7,6 +7,7 @@ export { default as ScatterPlot } from './charts/ScatterPlot.js';
 export { default as AreaChart } from './charts/AreaChart.js';
 export { default as DonutChart } from './charts/DonutChart.js';
 export { default as Histogram } from './charts/Histogram.js';
+export { default as SankeyChart } from './charts/SankeyChart.js';
 
 // Utility functions
 export * from './utils/index.js';
