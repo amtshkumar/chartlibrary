@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3 Chart Library - Examples</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 40px;
+        }
+        
+        .chart-section {
+            background: white;
+            margin: 30px 0;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .chart-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #34495e;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .chart-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .controls {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        button:hover {
+            background: #2980b9;
+        }
+        
+        .code-example {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        
+        .code-example pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        .d3-tooltip {
+            position: absolute;
+            visibility: hidden;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            pointer-events: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>D3 Chart Library - Interactive Examples</h1>
+        
+        <!-- Bar Chart Section -->
+        <div class="chart-section">
+            <div class="chart-title">Bar Chart</div>
+            <div id="bar-chart" class="chart-container"></div>
+            <div class="controls">
+                <button onclick="updateBarChart()">Update Data</button>
+                <button onclick="toggleBarOrientation()">Toggle Orientation</button>
+            </div>
+            <div class="code-example">
+                <pre>
+const barChart = new BarChart('#bar-chart', {
+    width: 800,
+    height: 400,
+    barColor: '#3498db',
+    showValues: true
+});
+
+const data = [
+    { label: 'A', value: 30 },
+    { label: 'B', value: 45 },
+    { label: 'C', value: 25 },
+    { label: 'D', value: 60 }
+];
+
+barChart.setData(data).render();
+                </pre>
+            </div>
+        </div>
+        
+        <!-- Line Chart Section -->
+        <div class="chart-section">
+            <div class="chart-title">Line Chart</div>
+            <div id="line-chart" class="chart-container"></div>
+            <div class="controls">
+                <button onclick="updateLineChart()">Update Data</button>
+                <button onclick="toggleLinePoints()">Toggle Points</button>
+                <button onclick="addLineSeries()">Add Series</button>
+            </div>
+            <div class="code-example">
+                <pre>
+const lineChart = new LineChart('#line-chart', {
+    width: 800,
+    height: 400,
+    lineColor: '#e74c3c',
+    showPoints: true
+});
+
+const data = [
+    { x: 0, y: 10 },
+    { x: 1, y: 25 },
+    { x: 2, y: 15 },
+    { x: 3, y: 30 }
+];
+
+lineChart.setData(data).render();
+                </pre>
+            </div>
+        </div>
+        
+        <!-- Pie Chart Section -->
+        <div class="chart-section">
+            <div class="chart-title">Pie Chart</div>
+            <div id="pie-chart" class="chart-container"></div>
+            <div class="controls">
+                <button onclick="updatePieChart()">Update Data</button>
+                <button onclick="explodePieSlice()">Explode Slice</button>
+            </div>
+            <div class="code-example">
+                <pre>
+const pieChart = new PieChart('#pie-chart', {
+    width: 600,
+    height: 600,
+    showLabels: true,
+    showPercentages: true
+});
+
+pieChart.setData(data).render();
+                </pre>
+            </div>
+        </div>
+        
+        <!-- Donut Chart Section -->
+        <div class="chart-section">
+            <div class="chart-title">Donut Chart</div>
+            <div id="donut-chart" class="chart-container"></div>
+            <div class="controls">
+                <button onclick="updateDonutChart()">Update Data</button>
+                <button onclick="showProgress()">Show Progress</button>
+            </div>
+            <div class="code-example">
+                <pre>
+const donutChart = new DonutChart('#donut-chart', {
+    width: 600,
+    height: 600,
+    innerRadius: 0.5,
+    showCenterText: true,
+    centerText: 'Total'
+});
+
+donutChart.setData(data).render();
+                </pre>
+            </div>
+        </div>
+        
+        <!-- Scatter Plot Section -->
+        <div class="chart-section">
+            <div class="chart-title">Scatter Plot</div>
+            <div id="scatter-plot" class="chart-container"></div>
+            <div class="controls">
+                <button onclick="updateScatterPlot()">Update Data</button>
+                <button onclick="toggleTrendLine()">Toggle Trend Line</button>
+                <button onclick="showBubbleChart()">Bubble Chart</button>
+            </div>
+            <div class="code-example">
+                <pre>
+const scatterPlot = new ScatterPlot('#scatter-plot', {
+    width: 800,
+    height: 400,
+    pointRadius: 5,
+    showTrendLine: true
+});
+
+const data = [
+    { x: 10, y: 20, label: 'Point 1' },
+    { x: 15, y: 35, label: 'Point 2' },
+    { x: 20, y: 25, label: 'Point 3' }
+];
+
+scatterPlot.setData(data).render();
+                </pre>
+            </div>
+        </div>
+        
+        <!-- Area Chart Section -->
+        <div class="chart-section">
+            <div class="chart-title">Area Chart</div>
+            <div id="area-chart" class="chart-container"></div>
+            <div class="controls">
+                <button onclick="updateAreaChart()">Update Data</button>
+                <button onclick="toggleAreaLine()">Toggle Line</button>
+                <button onclick="showStackedArea()">Stacked Area</button>
+            </div>
+            <div class="code-example">
+                <pre>
+const areaChart = new AreaChart('#area-chart', {
+    width: 800,
+    height: 400,
+    areaColor: 'rgba(52, 152, 219, 0.6)',
+    showLine: true
+});
+
+areaChart.setData(data).render();
+                </pre>
+            </div>
+        </div>
+        
+        <!-- Histogram Section -->
+        <div class="chart-section">
+            <div class="chart-title">Histogram</div>
+            <div id="histogram" class="chart-container"></div>
+            <div class="controls">
+                <button onclick="updateHistogram()">Update Data</button>
+                <button onclick="toggleDensity()">Toggle Density</button>
+                <button onclick="changeBins()">Change Bins</button>
+            </div>
+            <div class="code-example">
+                <pre>
+const histogram = new Histogram('#histogram', {
+    width: 800,
+    height: 400,
+    bins: 20,
+    showDensity: true
+});
+
+const data = Array.from({length: 1000}, () => 
+    Math.random() * 100
+);
+
+histogram.setData(data).render();
+                </pre>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import the chart library (in a real implementation, this would be from npm)
+        // For this example, we'll create simplified versions
+        
+        // Sample data generators
+        function generateBarData() {
+            const labels = ['A', 'B', 'C', 'D', 'E'];
+            return labels.map(label => ({
+                label,
+                value: Math.floor(Math.random() * 100) + 10
+            }));
+        }
+        
+        function generateLineData() {
+            const data = [];
+            for (let i = 0; i < 20; i++) {
+                data.push({
+                    x: i,
+                    y: Math.sin(i * 0.3) * 30 + 50 + Math.random() * 10
+                });
+            }
+            return data;
+        }
+        
+        function generateScatterData() {
+            const data = [];
+            for (let i = 0; i < 50; i++) {
+                data.push({
+                    x: Math.random() * 100,
+                    y: Math.random() * 100,
+                    label: `Point ${i + 1}`
+                });
+            }
+            return data;
+        }
+        
+        function generateHistogramData() {
+            const data = [];
+            for (let i = 0; i < 1000; i++) {
+                // Generate normal distribution
+                let u = 0, v = 0;
+                while(u === 0) u = Math.random();
+                while(v === 0) v = Math.random();
+                const normal = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+                data.push(normal * 15 + 50);
+            }
+            return data;
+        }
+        
+        // Note: In a real implementation, you would import the actual chart classes
+        // This is a simplified example showing the structure
+        
+        console.log('D3 Chart Library Examples Loaded');
+        console.log('In a real implementation, charts would be rendered here');
+        
+        // Global functions for button interactions
+        window.updateBarChart = () => console.log('Update bar chart');
+        window.toggleBarOrientation = () => console.log('Toggle bar orientation');
+        window.updateLineChart = () => console.log('Update line chart');
+        window.toggleLinePoints = () => console.log('Toggle line points');
+        window.addLineSeries = () => console.log('Add line series');
+        window.updatePieChart = () => console.log('Update pie chart');
+        window.explodePieSlice = () => console.log('Explode pie slice');
+        window.updateDonutChart = () => console.log('Update donut chart');
+        window.showProgress = () => console.log('Show progress');
+        window.updateScatterPlot = () => console.log('Update scatter plot');
+        window.toggleTrendLine = () => console.log('Toggle trend line');
+        window.showBubbleChart = () => console.log('Show bubble chart');
+        window.updateAreaChart = () => console.log('Update area chart');
+        window.toggleAreaLine = () => console.log('Toggle area line');
+        window.showStackedArea = () => console.log('Show stacked area');
+        window.updateHistogram = () => console.log('Update histogram');
+        window.toggleDensity = () => console.log('Toggle density');
+        window.changeBins = () => console.log('Change bins');
+    </script>
+</body>
+</html>
