@@ -580,6 +580,25 @@
                     <pre id="flow-containers-code"></pre>
                 </div>
             </div>
+
+            <!-- Spiral Chart -->
+            <div class="chart-card">
+                <div class="chart-title">🌀 Spiral Chart</div>
+                <div id="spiral-chart" class="chart-container">
+                    <div class="loading"></div>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="updateSpiralChart()">🔄 Update Data</button>
+                    <button class="btn secondary" onclick="toggleSpiralParticles()">✨ Toggle Particles</button>
+                    <button class="btn secondary" onclick="toggleSpiralFlowLines()">📈 Toggle Flow Lines</button>
+                    <button class="btn secondary" onclick="startSpiralAnimation()">▶️ Start Animation</button>
+                    <button class="btn secondary" onclick="changeSpiralMetric()">🎯 Change Metric</button>
+                </div>
+                <div class="code-example">
+                    <button class="copy-btn" onclick="copyToClipboard(spiralChartCode)">Copy</button>
+                    <pre id="spiral-code"></pre>
+                </div>
+            </div>
         </div>
     </div>
 

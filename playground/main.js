@@ -15,12 +15,13 @@ import {
   AnimatedBumpChart,
   RadialTimelineChart,
   FlowContainersChart,
+  SpiralChart,
   DataUtils,
   ColorUtils
 } from 'd3-charts-viz-library';
 
 // Global chart instances
-let barChart, lineChart, pieChart, donutChart, scatterPlot, areaChart, histogram, sankeyChart, liquidFillChart, radialRemainderChart, chordDiagramChart, forceDirectedChart, animatedBumpChart, radialTimelineChart, flowContainersChart;
+let barChart, lineChart, pieChart, donutChart, scatterPlot, areaChart, histogram, sankeyChart, liquidFillChart, radialRemainderChart, chordDiagramChart, forceDirectedChart, animatedBumpChart, radialTimelineChart, flowContainersChart, spiralChart;
 let isMultiSeries = false;
 let showTrendLine = false;
 let showDensity = false;
@@ -334,6 +335,31 @@ const data = {
 };
 
 flowContainersChart.setData(data).render();`;
+
+const spiralChartCode = `const spiralChart = new SpiralChart('#spiral-chart', {
+  width: 800,
+  height: 600,
+  turns: 4,
+  maxRadius: 250,
+  showParticles: true,
+  showFlowLines: true,
+  showBreathing: true,
+  selectedMetric: 'all',
+  centerLabel: 'Data Flow',
+  animationDuration: 1000
+});
+
+const data = {
+  timeSeries: [
+    { period: 1, primaryValue: 100000, secondaryValue: 25000, tertiaryValue: 15000, quaternaryValue: 8000 },
+    { period: 2, primaryValue: 110000, secondaryValue: 28000, tertiaryValue: 18000, quaternaryValue: 12000 },
+    { period: 3, primaryValue: 125000, secondaryValue: 32000, tertiaryValue: 22000, quaternaryValue: 15000 },
+    { period: 4, primaryValue: 140000, secondaryValue: 38000, tertiaryValue: 25000, quaternaryValue: 18000 },
+    { period: 5, primaryValue: 155000, secondaryValue: 42000, tertiaryValue: 28000, quaternaryValue: 22000 }
+  ]
+};
+
+spiralChart.setData(data).render();`;
 
 // Data generators
 function generateBarData() {
@@ -680,6 +706,42 @@ function generateFlowContainersData() {
   };
 }
 
+function generateSpiralData() {
+  const periods = 12;
+  const baseValue = 50000;
+  
+  const timeSeries = [];
+  for (let i = 0; i < periods; i++) {
+    const period = i + 1;
+    const growthFactor = 1 + (Math.random() * 0.4 - 0.2); // -20% to +20% variation
+    
+    const primaryValue = Math.floor(baseValue * growthFactor * (1 + i * 0.1));
+    const secondaryValue = Math.floor(primaryValue * (0.2 + Math.random() * 0.3));
+    const tertiaryValue = Math.floor(primaryValue * (0.1 + Math.random() * 0.2));
+    const quaternaryValue = Math.floor(primaryValue * (0.05 + Math.random() * 0.15));
+    
+    timeSeries.push({
+      period,
+      primaryValue,
+      secondaryValue,
+      tertiaryValue,
+      quaternaryValue,
+      // Legacy support for economic data
+      year: period,
+      growth: primaryValue,
+      income: secondaryValue,
+      distribution: tertiaryValue,
+      remainder: quaternaryValue
+    });
+  }
+  
+  return {
+    timeSeries,
+    // Legacy format support
+    economicSchedule: timeSeries
+  };
+}
+
 // Initialize charts
 function initializeCharts() {
   // Bar Chart
@@ -840,6 +902,22 @@ function initializeCharts() {
   });
   flowContainersChart.setData(generateFlowContainersData()).render();
 
+  // Spiral Chart
+  spiralChart = new SpiralChart('#spiral-chart', {
+    width: 800,
+    height: 600,
+    turns: 4,
+    maxRadius: 250,
+    showParticles: true,
+    showFlowLines: true,
+    showBreathing: true,
+    selectedMetric: 'all',
+    centerLabel: 'Data Flow',
+    animationDuration: 1000,
+    particleCount: 15
+  });
+  spiralChart.setData(generateSpiralData()).render();
+
   // Update code examples
   updateCodeExamples();
 }
@@ -860,6 +938,7 @@ function updateCodeExamples() {
   document.getElementById('animated-bump-code').textContent = animatedBumpChartCode;
   document.getElementById('radial-timeline-code').textContent = radialTimelineChartCode;
   document.getElementById('flow-containers-code').textContent = flowContainersChartCode;
+  document.getElementById('spiral-code').textContent = spiralChartCode;
 }
 
 // Global functions for button interactions
@@ -1132,6 +1211,34 @@ window.toggleFlowBubbles = () => {
 
 window.startFlowAnimation = () => {
   flowContainersChart.startAnimation();
+};
+
+// Spiral Chart Functions
+window.updateSpiralChart = () => {
+  spiralChart.setData(generateSpiralData()).render();
+};
+
+window.toggleSpiralParticles = () => {
+  const currentParticles = spiralChart.options.showParticles;
+  spiralChart.options.showParticles = !currentParticles;
+  spiralChart.render();
+};
+
+window.toggleSpiralFlowLines = () => {
+  const currentFlowLines = spiralChart.options.showFlowLines;
+  spiralChart.options.showFlowLines = !currentFlowLines;
+  spiralChart.render();
+};
+
+window.startSpiralAnimation = () => {
+  spiralChart.startAnimation();
+};
+
+window.changeSpiralMetric = () => {
+  const metrics = ['all', 'primary', 'secondary', 'tertiary', 'quaternary'];
+  const currentIndex = metrics.indexOf(spiralChart.options.selectedMetric);
+  const nextIndex = (currentIndex + 1) % metrics.length;
+  spiralChart.setSelectedMetric(metrics[nextIndex]);
 };
 
 // Copy to clipboard function

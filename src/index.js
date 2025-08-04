@@ -15,6 +15,7 @@ export { default as ForceDirectedChart } from './charts/ForceDirectedChart.js';
 export { default as AnimatedBumpChart } from './charts/AnimatedBumpChart.js';
 export { default as RadialTimelineChart } from './charts/RadialTimelineChart.js';
 export { default as FlowContainersChart } from './charts/FlowContainersChart.js';
+export { default as SpiralChart } from './charts/SpiralChart.js';
 
 // Utility functions
 export * from './utils/index.js';
