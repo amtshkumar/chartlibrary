@@ -12,12 +12,13 @@ import {
   RadialRemainderChart,
   ChordDiagramChart,
   ForceDirectedChart,
+  AnimatedBumpChart,
   DataUtils,
   ColorUtils
 } from 'd3-charts-viz-library';
 
 // Global chart instances
-let barChart, lineChart, pieChart, donutChart, scatterPlot, areaChart, histogram, sankeyChart, liquidFillChart, radialRemainderChart, chordDiagramChart, forceDirectedChart;
+let barChart, lineChart, pieChart, donutChart, scatterPlot, areaChart, histogram, sankeyChart, liquidFillChart, radialRemainderChart, chordDiagramChart, forceDirectedChart, animatedBumpChart;
 let isMultiSeries = false;
 let showTrendLine = false;
 let showDensity = false;
@@ -251,6 +252,33 @@ const data = {
 };
 
 forceDirectedChart.setData(data).render();`;
+
+const animatedBumpChartCode = `const animatedBumpChart = new AnimatedBumpChart('#animated-bump-chart', {
+  width: 800,
+  height: 500,
+  animationDuration: 1500,
+  animationDelay: 500,
+  principalRatio: 0.6,
+  showDistributionBars: true,
+  showPoints: true
+});
+
+const data = {
+  economicSchedule: [
+    { remainder: 1000000, distribution: 50000 },
+    { remainder: 1050000, distribution: 52500 },
+    { remainder: 1102500, distribution: 55125 },
+    { remainder: 1157625, distribution: 57881 },
+    { remainder: 1215506, distribution: 60775 },
+    { remainder: 1276281, distribution: 63814 },
+    { remainder: 1340095, distribution: 67005 },
+    { remainder: 1407100, distribution: 70355 },
+    { remainder: 1477455, distribution: 73873 },
+    { remainder: 1551328, distribution: 77566 }
+  ]
+};
+
+animatedBumpChart.setData(data).render();`;
 
 // Data generators
 function generateBarData() {
@@ -523,6 +551,30 @@ function generateForceDirectedData() {
   };
 }
 
+function generateAnimatedBumpData() {
+  const years = 10;
+  const initialValue = 1000000;
+  const baseDistribution = 50000;
+  
+  const economicSchedule = [];
+  for (let i = 0; i < years; i++) {
+    const remainder = initialValue * Math.pow(1.05, i);
+    const distribution = baseDistribution * (1 + i * 0.05);
+    const income = distribution * 0.8; // Assume 80% of distribution is income
+    
+    economicSchedule.push({ 
+      remainder: Math.floor(remainder),
+      distribution: Math.floor(distribution),
+      income: Math.floor(income),
+      year: i + 1
+    });
+  }
+  
+  return {
+    economicSchedule
+  };
+}
+
 // Initialize charts
 function initializeCharts() {
   // Bar Chart
@@ -645,6 +697,18 @@ function initializeCharts() {
   });
   forceDirectedChart.setData(generateForceDirectedData()).render();
 
+  // Animated Bump Chart
+  animatedBumpChart = new AnimatedBumpChart('#animated-bump-chart', {
+    width: 800,
+    height: 500,
+    animationDuration: 1500,
+    animationDelay: 500,
+    principalRatio: 0.6,
+    showDistributionBars: true,
+    showPoints: true
+  });
+  animatedBumpChart.setData(generateAnimatedBumpData()).render();
+
   // Update code examples
   updateCodeExamples();
 }
@@ -662,6 +726,7 @@ function updateCodeExamples() {
   document.getElementById('radial-remainder-code').textContent = radialRemainderChartCode;
   document.getElementById('chord-diagram-code').textContent = chordDiagramChartCode;
   document.getElementById('force-directed-code').textContent = forceDirectedChartCode;
+  document.getElementById('animated-bump-code').textContent = animatedBumpChartCode;
 }
 
 // Global functions for button interactions
@@ -882,6 +947,22 @@ window.toggleForceGlow = () => {
   const currentGlow = forceDirectedChart.options.showGlowEffects;
   forceDirectedChart.updateOptions({ showGlowEffects: !currentGlow });
   forceDirectedChart.render();
+};
+
+window.updateAnimatedBumpChart = () => {
+  animatedBumpChart.updateData(generateAnimatedBumpData());
+};
+
+window.toggleBumpPoints = () => {
+  const currentPoints = animatedBumpChart.options.showPoints;
+  animatedBumpChart.updateOptions({ showPoints: !currentPoints });
+  animatedBumpChart.render();
+};
+
+window.toggleBumpBars = () => {
+  const currentBars = animatedBumpChart.options.showDistributionBars;
+  animatedBumpChart.updateOptions({ showDistributionBars: !currentBars });
+  animatedBumpChart.render();
 };
 
 // Copy to clipboard function
