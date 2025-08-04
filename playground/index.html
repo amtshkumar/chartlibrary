@@ -511,6 +511,23 @@
                     <pre id="chord-diagram-code"></pre>
                 </div>
             </div>
+
+            <!-- Force Directed Chart -->
+            <div class="chart-card">
+                <div class="chart-title">⚡ Force Directed Chart</div>
+                <div id="force-directed-chart" class="chart-container">
+                    <div class="loading"></div>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="updateForceDirectedChart()">🔄 Update Data</button>
+                    <button class="btn secondary" onclick="toggleForceParticles()">✨ Toggle Particles</button>
+                    <button class="btn secondary" onclick="toggleForceGlow()">🌟 Toggle Glow</button>
+                </div>
+                <div class="code-example">
+                    <button class="copy-btn" onclick="copyToClipboard(forceDirectedChartCode)">Copy</button>
+                    <pre id="force-directed-code"></pre>
+                </div>
+            </div>
         </div>
     </div>
 

@@ -11,12 +11,13 @@ import {
   LiquidFillChart,
   RadialRemainderChart,
   ChordDiagramChart,
+  ForceDirectedChart,
   DataUtils,
   ColorUtils
 } from 'd3-charts-viz-library';
 
 // Global chart instances
-let barChart, lineChart, pieChart, donutChart, scatterPlot, areaChart, histogram, sankeyChart, liquidFillChart, radialRemainderChart, chordDiagramChart;
+let barChart, lineChart, pieChart, donutChart, scatterPlot, areaChart, histogram, sankeyChart, liquidFillChart, radialRemainderChart, chordDiagramChart, forceDirectedChart;
 let isMultiSeries = false;
 let showTrendLine = false;
 let showDensity = false;
@@ -226,6 +227,30 @@ const data = {
 };
 
 chordDiagramChart.setData(data).render();`;
+
+const forceDirectedChartCode = `const forceDirectedChart = new ForceDirectedChart('#force-directed-chart', {
+  width: 800,
+  height: 600,
+  particleCount: 15,
+  animationDuration: 2000,
+  showParticles: true,
+  showGlowEffects: true,
+  enableZoom: true
+});
+
+const data = {
+  economicSchedule: [
+    { remainder: 1000000, distribution: 50000 },
+    { remainder: 1050000, distribution: 52500 },
+    { remainder: 1102500, distribution: 55125 },
+    { remainder: 1157625, distribution: 57881 },
+    { remainder: 1215506, distribution: 60775 }
+  ],
+  charitDeduction: 300000,
+  optimalPayout: 250000
+};
+
+forceDirectedChart.setData(data).render();`;
 
 // Data generators
 function generateBarData() {
@@ -472,6 +497,32 @@ function generateComplexChordDiagramData() {
   };
 }
 
+function generateForceDirectedData() {
+  const years = 8;
+  const initialValue = 1000000;
+  const baseDistribution = 50000;
+  const charitDeduction = initialValue * 0.3;
+  const optimalPayout = initialValue * 0.25;
+  
+  const economicSchedule = [];
+  for (let i = 0; i < years; i++) {
+    const remainder = initialValue * Math.pow(1.05, i);
+    const distribution = baseDistribution * (1 + i * 0.05);
+    
+    economicSchedule.push({ 
+      remainder: Math.floor(remainder),
+      distribution: Math.floor(distribution),
+      year: i + 1
+    });
+  }
+  
+  return {
+    economicSchedule,
+    charitDeduction,
+    optimalPayout
+  };
+}
+
 // Initialize charts
 function initializeCharts() {
   // Bar Chart
@@ -582,6 +633,18 @@ function initializeCharts() {
   });
   chordDiagramChart.setData(generateChordDiagramData()).render();
 
+  // Force Directed Chart
+  forceDirectedChart = new ForceDirectedChart('#force-directed-chart', {
+    width: 800,
+    height: 600,
+    particleCount: 15,
+    animationDuration: 2000,
+    showParticles: true,
+    showGlowEffects: true,
+    enableZoom: true
+  });
+  forceDirectedChart.setData(generateForceDirectedData()).render();
+
   // Update code examples
   updateCodeExamples();
 }
@@ -598,6 +661,7 @@ function updateCodeExamples() {
   document.getElementById('liquid-fill-code').textContent = liquidFillChartCode;
   document.getElementById('radial-remainder-code').textContent = radialRemainderChartCode;
   document.getElementById('chord-diagram-code').textContent = chordDiagramChartCode;
+  document.getElementById('force-directed-code').textContent = forceDirectedChartCode;
 }
 
 // Global functions for button interactions
@@ -802,6 +866,22 @@ window.changeChordPadding = () => {
   const newPadding = currentPadding === 0.05 ? 0.1 : currentPadding === 0.1 ? 0.02 : 0.05;
   chordDiagramChart.updateOptions({ padAngle: newPadding });
   chordDiagramChart.render();
+};
+
+window.updateForceDirectedChart = () => {
+  forceDirectedChart.updateData(generateForceDirectedData());
+};
+
+window.toggleForceParticles = () => {
+  const currentParticles = forceDirectedChart.options.showParticles;
+  forceDirectedChart.updateOptions({ showParticles: !currentParticles });
+  forceDirectedChart.render();
+};
+
+window.toggleForceGlow = () => {
+  const currentGlow = forceDirectedChart.options.showGlowEffects;
+  forceDirectedChart.updateOptions({ showGlowEffects: !currentGlow });
+  forceDirectedChart.render();
 };
 
 // Copy to clipboard function

@@ -11,6 +11,7 @@ export { default as SankeyChart } from './charts/SankeyChart.js';
 export { default as LiquidFillChart } from './charts/LiquidFillChart.js';
 export { default as RadialRemainderChart } from './charts/RadialRemainderChart.js';
 export { default as ChordDiagramChart } from './charts/ChordDiagramChart.js';
+export { default as ForceDirectedChart } from './charts/ForceDirectedChart.js';
 
 // Utility functions
 export * from './utils/index.js';
