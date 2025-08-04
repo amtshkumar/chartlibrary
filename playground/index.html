@@ -288,7 +288,7 @@
     <div class="header">
         <div class="container">
             <h1>D3 Charts Viz Library</h1>
-            <p class="subtitle">Interactive playground showcasing 10 different chart types</p>
+            <p class="subtitle">Interactive playground showcasing 11 different chart types</p>
         </div>
     </div>
 
@@ -492,6 +492,23 @@
                 <div class="code-example">
                     <button class="copy-btn" onclick="copyToClipboard(radialRemainderChartCode)">Copy</button>
                     <pre id="radial-remainder-code"></pre>
+                </div>
+            </div>
+
+            <!-- Chord Diagram Chart -->
+            <div class="chart-card">
+                <div class="chart-title">🔗 Chord Diagram Chart</div>
+                <div id="chord-diagram-chart" class="chart-container">
+                    <div class="loading"></div>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="updateChordDiagramChart()">🔄 Update Data</button>
+                    <button class="btn secondary" onclick="showComplexChordDiagram()">📈 Complex Flow</button>
+                    <button class="btn secondary" onclick="changeChordPadding()">🔗 Change Padding</button>
+                </div>
+                <div class="code-example">
+                    <button class="copy-btn" onclick="copyToClipboard(chordDiagramChartCode)">Copy</button>
+                    <pre id="chord-diagram-code"></pre>
                 </div>
             </div>
         </div>

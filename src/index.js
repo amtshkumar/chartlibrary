@@ -10,6 +10,7 @@ export { default as Histogram } from './charts/Histogram.js';
 export { default as SankeyChart } from './charts/SankeyChart.js';
 export { default as LiquidFillChart } from './charts/LiquidFillChart.js';
 export { default as RadialRemainderChart } from './charts/RadialRemainderChart.js';
+export { default as ChordDiagramChart } from './charts/ChordDiagramChart.js';
 
 // Utility functions
 export * from './utils/index.js';

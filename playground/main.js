@@ -10,12 +10,13 @@ import {
   SankeyChart,
   LiquidFillChart,
   RadialRemainderChart,
+  ChordDiagramChart,
   DataUtils,
   ColorUtils
 } from 'd3-charts-viz-library';
 
 // Global chart instances
-let barChart, lineChart, pieChart, donutChart, scatterPlot, areaChart, histogram, sankeyChart, liquidFillChart, radialRemainderChart;
+let barChart, lineChart, pieChart, donutChart, scatterPlot, areaChart, histogram, sankeyChart, liquidFillChart, radialRemainderChart, chordDiagramChart;
 let isMultiSeries = false;
 let showTrendLine = false;
 let showDensity = false;
@@ -204,6 +205,27 @@ const data = {
 };
 
 radialRemainderChart.setData(data).render();`;
+
+const chordDiagramChartCode = `const chordDiagramChart = new ChordDiagramChart('#chord-diagram-chart', {
+  width: 600,
+  height: 600,
+  padAngle: 0.05,
+  animationDuration: 1200,
+  title: 'Trust Relationships'
+});
+
+const data = {
+  data: {
+    economicSchedule: [
+      { remainder: 1000000, distribution: 50000 },
+      { remainder: 1050000, distribution: 52500 },
+      { remainder: 1102500, distribution: 55125 }
+    ],
+    charitDeduction: 300000
+  }
+};
+
+chordDiagramChart.setData(data).render();`;
 
 // Data generators
 function generateBarData() {
@@ -395,6 +417,61 @@ function generateComplexRadialRemainderData() {
   return { economicSchedule };
 }
 
+function generateChordDiagramData() {
+  const years = 5;
+  const initialValue = 1000000;
+  const baseDistribution = 50000;
+  const charitDeduction = initialValue * 0.3;
+  
+  const economicSchedule = [];
+  for (let i = 0; i < years; i++) {
+    const remainder = initialValue * Math.pow(1.05, i);
+    const distribution = baseDistribution * (1 + i * 0.05);
+    
+    economicSchedule.push({ 
+      remainder: Math.floor(remainder),
+      distribution: Math.floor(distribution)
+    });
+  }
+  
+  return {
+    data: {
+      economicSchedule,
+      charitDeduction
+    }
+  };
+}
+
+function generateComplexChordDiagramData() {
+  const years = 10;
+  const initialValue = 2000000;
+  const charitDeduction = initialValue * 0.35;
+  
+  const economicSchedule = [];
+  for (let i = 0; i < years; i++) {
+    // Variable growth and distributions
+    const growthRate = 0.04 + Math.sin(i * 0.3) * 0.02;
+    const remainder = i === 0 ? initialValue : 
+      economicSchedule[i - 1].remainder * (1 + growthRate);
+    
+    const distributionRate = 0.045 + Math.cos(i * 0.4) * 0.01;
+    const distribution = remainder * distributionRate;
+    
+    economicSchedule.push({ 
+      remainder: Math.floor(remainder),
+      distribution: Math.floor(distribution),
+      year: i + 1
+    });
+  }
+  
+  return {
+    data: {
+      economicSchedule,
+      charitDeduction
+    }
+  };
+}
+
 // Initialize charts
 function initializeCharts() {
   // Bar Chart
@@ -495,6 +572,16 @@ function initializeCharts() {
   });
   radialRemainderChart.setData(generateRadialRemainderData()).render();
 
+  // Chord Diagram Chart
+  chordDiagramChart = new ChordDiagramChart('#chord-diagram-chart', {
+    width: 600,
+    height: 600,
+    padAngle: 0.05,
+    animationDuration: 1200,
+    title: 'Trust Relationships'
+  });
+  chordDiagramChart.setData(generateChordDiagramData()).render();
+
   // Update code examples
   updateCodeExamples();
 }
@@ -510,6 +597,7 @@ function updateCodeExamples() {
   document.getElementById('sankey-code').textContent = sankeyChartCode;
   document.getElementById('liquid-fill-code').textContent = liquidFillChartCode;
   document.getElementById('radial-remainder-code').textContent = radialRemainderChartCode;
+  document.getElementById('chord-diagram-code').textContent = chordDiagramChartCode;
 }
 
 // Global functions for button interactions
@@ -699,6 +787,21 @@ window.changeRadialSpirals = () => {
   const newRotations = currentRotations === 2 ? 3 : currentRotations === 3 ? 1 : 2;
   radialRemainderChart.updateOptions({ spiralRotations: newRotations });
   radialRemainderChart.render();
+};
+
+window.updateChordDiagramChart = () => {
+  chordDiagramChart.updateData(generateChordDiagramData());
+};
+
+window.showComplexChordDiagram = () => {
+  chordDiagramChart.updateData(generateComplexChordDiagramData());
+};
+
+window.changeChordPadding = () => {
+  const currentPadding = chordDiagramChart.options.padAngle;
+  const newPadding = currentPadding === 0.05 ? 0.1 : currentPadding === 0.1 ? 0.02 : 0.05;
+  chordDiagramChart.updateOptions({ padAngle: newPadding });
+  chordDiagramChart.render();
 };
 
 // Copy to clipboard function
