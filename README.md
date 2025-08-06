@@ -630,9 +630,23 @@ This library has undergone comprehensive testing and bug fixes to ensure product
 
 ### v1.0.11 (Latest)
 - ✨ **NEW**: Added RadialStackedBarChart with concentric rings and stacked segments
+  - Beautiful radial visualization with year-over-year data in concentric rings
+  - Three color schemes: blue, orange, and green
+  - Interactive hover tooltips with detailed component breakdown
+  - Click to select years with animated transitions
+  - Configurable options: animation, legend, tooltips, center label
 - 🎨 **ENHANCED**: Generic data structure for broader applicability
+  - Replaced financial-specific terms with generic categories (categoryA, categoryB, categoryC)
+  - Flexible data format suitable for various use cases beyond financial data
+  - Improved data generator with configurable percentages and growth patterns
 - 🎮 **IMPROVED**: Interactive playground with 12 chart types
+  - Added RadialStackedBarChart to playground with full interactive controls
+  - New controls: Update Data, Change Color Scheme, Toggle Animation, Toggle Legend
+  - Copy-to-clipboard functionality for complete code examples
 - 📚 **UPDATED**: Comprehensive documentation and code examples
+  - Complete README section with usage examples and data structure
+  - Updated chart count from 16+ to 17+ chart types
+  - Added sample code with generic data for easy implementation
 
 ### v1.0.10
 - ✨ **NEW**: Added SpiralChart with floating particles and breathing animations
