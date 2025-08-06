@@ -20,14 +20,44 @@
   },
   "keywords": [
     "d3",
+    "d3js",
     "charts",
     "graphs",
     "visualization",
     "data-visualization",
+    "dataviz",
     "svg",
-    "javascript"
+    "javascript",
+    "interactive-charts",
+    "bar-chart",
+    "line-chart",
+    "pie-chart",
+    "area-chart",
+    "scatter-plot",
+    "donut-chart",
+    "radial-chart",
+    "stacked-chart",
+    "spiral-chart",
+    "bubble-chart",
+    "heatmap",
+    "treemap",
+    "dashboard",
+    "analytics",
+    "business-intelligence",
+    "frontend",
+    "web-components",
+    "chart-library",
+    "plotting",
+    "statistical-charts",
+    "responsive-charts",
+    "animated-charts",
+    "customizable",
+    "playground"
   ],
-  "author": "Amitesh Kumar",
+  "author": {
+    "name": "Amitesh Kumar",
+    "url": "https://coderhub.fun/"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -36,7 +66,7 @@
   "bugs": {
     "url": "https://github.com/amtshkumar/chartlibrary/issues"
   },
-  "homepage": "https://github.com/amtshkumar/chartlibrary#readme",
+  "homepage": "https://coderhub.fun/",
   "peerDependencies": {
     "d3": "^7.8.5"
   },
