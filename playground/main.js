@@ -16,12 +16,13 @@ import {
   RadialTimelineChart,
   FlowContainersChart,
   SpiralChart,
+  RadialStackedBarChart,
   DataUtils,
   ColorUtils
 } from 'd3-charts-viz-library';
 
 // Global chart instances
-let barChart, lineChart, pieChart, donutChart, scatterPlot, areaChart, histogram, sankeyChart, liquidFillChart, radialRemainderChart, chordDiagramChart, forceDirectedChart, animatedBumpChart, radialTimelineChart, flowContainersChart, spiralChart;
+let barChart, lineChart, pieChart, donutChart, scatterPlot, areaChart, histogram, sankeyChart, liquidFillChart, radialRemainderChart, chordDiagramChart, forceDirectedChart, animatedBumpChart, radialTimelineChart, flowContainersChart, spiralChart, radialStackedBarChart;
 let isMultiSeries = false;
 let showTrendLine = false;
 let showDensity = false;
@@ -360,6 +361,41 @@ const data = {
 };
 
 spiralChart.setData(data).render();`;
+
+const radialStackedBarChartCode = `const radialStackedBarChart = new RadialStackedBarChart('#radial-stacked-bar-chart', {
+  width: 600,
+  height: 600,
+  colorScheme: 'blue', // 'blue', 'orange', or 'green'
+  animated: true,
+  showLegend: true,
+  showTooltip: true
+});
+
+const data = [
+  {
+    year: 2024,
+    categoryA: 50000,
+    categoryB: 75000,
+    categoryC: 5000,
+    totalValue: 130000
+  },
+  {
+    year: 2025,
+    categoryA: 52500,
+    categoryB: 82000,
+    categoryC: 5200,
+    totalValue: 139700
+  },
+  {
+    year: 2026,
+    categoryA: 55125,
+    categoryB: 89500,
+    categoryC: 5400,
+    totalValue: 150025
+  }
+];
+
+radialStackedBarChart.setData(data).render();`;
 
 // Data generators
 function generateBarData() {
@@ -793,6 +829,34 @@ function generateSpiralData() {
   };
 }
 
+function generateRadialStackedBarData() {
+  const years = 8;
+  const baseYear = 2024;
+  const baseValue = 100000;
+  
+  const data = [];
+  for (let i = 0; i < years; i++) {
+    const year = baseYear + i;
+    const growthFactor = 1 + (i * 0.08); // 8% annual growth
+    const volatility = 0.9 + (Math.random() * 0.2); // ±10% volatility
+    
+    const totalValue = Math.floor(baseValue * growthFactor * volatility);
+    const categoryA = Math.floor(totalValue * (0.4 + Math.random() * 0.2)); // 40-60%
+    const categoryC = Math.floor(totalValue * (0.05 + Math.random() * 0.05)); // 5-10%
+    const categoryB = totalValue - categoryA - categoryC; // Remainder
+    
+    data.push({
+      year,
+      categoryA,
+      categoryB,
+      categoryC,
+      totalValue
+    });
+  }
+  
+  return data;
+}
+
 // Initialize charts
 function initializeCharts() {
   // Bar Chart
@@ -969,6 +1033,18 @@ function initializeCharts() {
   });
   spiralChart.setData(generateSpiralData()).render();
 
+  // Radial Stacked Bar Chart
+  radialStackedBarChart = new RadialStackedBarChart('#radial-stacked-bar-chart', {
+    width: 600,
+    height: 600,
+    colorScheme: 'blue',
+    animated: true,
+    showLegend: true,
+    showTooltip: true,
+    showCenterLabel: true
+  });
+  radialStackedBarChart.setData(generateRadialStackedBarData()).render();
+
   // Update code examples
   updateCodeExamples();
 }
@@ -990,6 +1066,7 @@ function updateCodeExamples() {
   document.getElementById('radial-timeline-code').textContent = radialTimelineChartCode;
   document.getElementById('flow-containers-code').textContent = flowContainersChartCode;
   document.getElementById('spiral-code').textContent = spiralChartCode;
+  document.getElementById('radial-stacked-bar-code').textContent = radialStackedBarChartCode;
 }
 
 // Global functions for button interactions
@@ -1292,6 +1369,31 @@ window.changeSpiralMetric = () => {
   spiralChart.setSelectedMetric(metrics[nextIndex]);
 };
 
+// Radial Stacked Bar Chart Functions
+window.updateRadialStackedBarChart = () => {
+  radialStackedBarChart.setData(generateRadialStackedBarData()).render();
+};
+
+window.changeColorScheme = () => {
+  const colorSchemes = ['blue', 'orange', 'green'];
+  const currentIndex = colorSchemes.indexOf(radialStackedBarChart.options.colorScheme);
+  const nextIndex = (currentIndex + 1) % colorSchemes.length;
+  radialStackedBarChart.updateColorScheme(colorSchemes[nextIndex]);
+};
+
+window.toggleRadialAnimation = () => {
+  const currentAnimated = radialStackedBarChart.options.animated;
+  radialStackedBarChart.options.animated = !currentAnimated;
+  radialStackedBarChart.render();
+};
+
+window.toggleRadialLegend = () => {
+  const currentLegend = radialStackedBarChart.options.showLegend;
+  radialStackedBarChart.options.showLegend = !currentLegend;
+  radialStackedBarChart.init();
+  radialStackedBarChart.render();
+};
+
 // Copy to clipboard function
 window.copyToClipboard = (text) => {
   navigator.clipboard.writeText(text).then(() => {
@@ -1317,6 +1419,7 @@ window.scatterPlotCode = scatterPlotCode;
 window.areaChartCode = areaChartCode;
 window.histogramCode = histogramCode;
 window.sankeyChartCode = sankeyChartCode;
+window.radialStackedBarChartCode = radialStackedBarChartCode;
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {

@@ -1,10 +1,10 @@
 # D3 Charts Visualization Library
 
-A comprehensive, production-ready D3-based chart library with 16+ chart types for creating stunning data visualizations.
+A comprehensive, production-ready D3-based chart library with 17+ chart types for creating stunning data visualizations.
 
 ## 🚀 Features
 
-- 🎯 **16+ Chart Types**: From basic Bar/Line charts to advanced Spiral, Force-Directed, and Flow Container visualizations
+- 🎯 **17+ Chart Types**: From basic Bar/Line charts to advanced Spiral, Force-Directed, and Radial Stacked visualizations
 - 🎨 **Highly Customizable**: Extensive configuration options for colors, animations, and styling
 - 📱 **Responsive Design**: Charts automatically adapt to container size changes
 - 🖱️ **Interactive**: Built-in hover effects, tooltips, zoom, and click handlers
@@ -88,7 +88,7 @@ chart.setData(data).render();
 
 ## 📊 Chart Types
 
-The library includes 16+ chart types, from basic visualizations to advanced animated charts:
+The library includes 17+ chart types, from basic visualizations to advanced animated charts:
 
 ### 📊 Basic Charts
 
@@ -422,6 +422,48 @@ const radialRemainderChart = new RadialRemainderChart('#container', {
 radialRemainderChart.setData(timelineData).render();
 ```
 
+#### Radial Stacked Bar Chart
+Concentric rings with stacked segments for multi-category data visualization.
+
+```javascript
+import { RadialStackedBarChart } from 'd3-charts-viz-library';
+
+const radialStackedBarChart = new RadialStackedBarChart('#container', {
+  width: 600,
+  height: 600,
+  colorScheme: 'blue', // 'blue', 'orange', or 'green'
+  animated: true,
+  showLegend: true,
+  showTooltip: true
+});
+
+const data = [
+  {
+    year: 2024,
+    categoryA: 50000,
+    categoryB: 75000,
+    categoryC: 5000,
+    totalValue: 130000
+  },
+  {
+    year: 2025,
+    categoryA: 52500,
+    categoryB: 82000,
+    categoryC: 5200,
+    totalValue: 139700
+  },
+  {
+    year: 2026,
+    categoryA: 55125,
+    categoryB: 89500,
+    categoryC: 5400,
+    totalValue: 150025
+  }
+];
+
+radialStackedBarChart.setData(data).render();
+```
+
 ## Multi-Series Charts
 
 ### Multi-Line Chart
@@ -586,7 +628,13 @@ This library has undergone comprehensive testing and bug fixes to ensure product
 
 ## Changelog
 
-### v1.0.10 (Latest)
+### v1.0.11 (Latest)
+- ✨ **NEW**: Added RadialStackedBarChart with concentric rings and stacked segments
+- 🎨 **ENHANCED**: Generic data structure for broader applicability
+- 🎮 **IMPROVED**: Interactive playground with 12 chart types
+- 📚 **UPDATED**: Comprehensive documentation and code examples
+
+### v1.0.10
 - ✨ **NEW**: Added SpiralChart with floating particles and breathing animations
 - 🔧 **FIXED**: RadialTimelineChart SVG path validation and animation safety
 - 🔧 **FIXED**: FlowContainersChart context issues and recursive method calls

@@ -288,7 +288,7 @@
     <div class="header">
         <div class="container">
             <h1>D3 Charts Viz Library</h1>
-            <p class="subtitle">Interactive playground showcasing 11 different chart types</p>
+            <p class="subtitle">Interactive playground showcasing 12 different chart types</p>
         </div>
     </div>
 
@@ -597,6 +597,24 @@
                 <div class="code-example">
                     <button class="copy-btn" onclick="copyToClipboard(spiralChartCode)">Copy</button>
                     <pre id="spiral-code"></pre>
+                </div>
+            </div>
+
+            <!-- Radial Stacked Bar Chart -->
+            <div class="chart-card">
+                <div class="chart-title">🎯 Radial Stacked Bar Chart</div>
+                <div id="radial-stacked-bar-chart" class="chart-container">
+                    <div class="loading"></div>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="updateRadialStackedBarChart()">🔄 Update Data</button>
+                    <button class="btn secondary" onclick="changeColorScheme()">🎨 Change Color Scheme</button>
+                    <button class="btn secondary" onclick="toggleRadialAnimation()">✨ Toggle Animation</button>
+                    <button class="btn secondary" onclick="toggleRadialLegend()">📋 Toggle Legend</button>
+                </div>
+                <div class="code-example">
+                    <button class="copy-btn" onclick="copyToClipboard(radialStackedBarChartCode)">Copy</button>
+                    <pre id="radial-stacked-bar-code"></pre>
                 </div>
             </div>
         </div>
