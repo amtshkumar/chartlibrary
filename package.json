@@ -66,7 +66,7 @@
   "bugs": {
     "url": "https://github.com/amtshkumar/chartlibrary/issues"
   },
-  "homepage": "https://coderhub.fun/",
+  "homepage": "https://coderhub.fun",
   "peerDependencies": {
     "d3": "^7.8.5"
   },
