@@ -1,7 +1,7 @@
 {
   "name": "d3-charts-viz-library",
   "type": "module",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "A comprehensive D3-based chart library with customizable charts and graphs",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -31,12 +31,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/amiteshk/d3-chart-library.git"
+    "url": "https://github.com/amtshkumar/chartlibrary"
   },
   "bugs": {
-    "url": "https://github.com/amiteshk/d3-chart-library/issues"
+    "url": "https://github.com/amtshkumar/chartlibrary/issues"
   },
-  "homepage": "https://github.com/amiteshk/d3-chart-library#readme",
+  "homepage": "https://github.com/amtshkumar/chartlibrary#readme",
   "peerDependencies": {
     "d3": "^7.8.5"
   },

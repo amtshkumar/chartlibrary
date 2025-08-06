@@ -325,13 +325,13 @@ const flowContainersChartCode = `const flowContainersChart = new FlowContainersC
 
 const data = {
   containers: [
-    { year: 2024, amount: 120000, fillPercentage: 0.65, label: 'Year 2024' },
-    { year: 2025, amount: 135000, fillPercentage: 0.72, label: 'Year 2025' },
-    { year: 2026, amount: 148000, fillPercentage: 0.58, label: 'Year 2026' },
-    { year: 2027, amount: 162000, fillPercentage: 0.81, label: 'Year 2027' }
+    { period: 1, value: 120000, fillPercentage: 0.65, label: 'Period 1' },
+    { period: 2, value: 135000, fillPercentage: 0.72, label: 'Period 2' },
+    { period: 3, value: 148000, fillPercentage: 0.58, label: 'Period 3' },
+    { period: 4, value: 162000, fillPercentage: 0.81, label: 'Period 4' }
   ],
-  totalAmount: 565000,
-  title: 'Financial Flow Containers'
+  totalValue: 565000,
+  title: 'Data Flow Containers'
 };
 
 flowContainersChart.setData(data).render();`;
@@ -363,7 +363,7 @@ spiralChart.setData(data).render();`;
 
 // Data generators
 function generateBarData() {
-  const labels = ['Product A', 'Product B', 'Product C', 'Product D', 'Product E'];
+  const labels = ['Category A', 'Category B', 'Category C', 'Category D', 'Category E'];
   return labels.map(label => ({
     label,
     value: Math.floor(Math.random() * 80) + 20
@@ -382,10 +382,10 @@ function generateLineData() {
 }
 
 function generatePieData() {
-  const labels = ['Desktop', 'Mobile', 'Tablet', 'Other'];
-  return labels.map(label => ({
-    label,
-    value: Math.floor(Math.random() * 40) + 10
+  const categories = ['Segment A', 'Segment B', 'Segment C', 'Segment D', 'Segment E'];
+  return categories.map(category => ({
+    label: category,
+    value: Math.floor(Math.random() * 50) + 10
   }));
 }
 
@@ -451,19 +451,30 @@ function generateSankeyData() {
   return { nodes, links, efficiency };
 }
 
-function generateEconomicSankeyData() {
-  const economicSchedule = [
-    { distribution: 50000, remainder: 1000000 },
-    { distribution: 55000, remainder: 950000 },
-    { distribution: 60000, remainder: 890000 },
-    { distribution: 65000, remainder: 825000 },
-    { distribution: 70000, remainder: 755000 }
+function generateAlternateSankeyData() {
+  const timeSeries = [
+    { secondaryValue: 50000, primaryValue: 1000000 },
+    { secondaryValue: 55000, primaryValue: 950000 },
+    { secondaryValue: 60000, primaryValue: 890000 },
+    { secondaryValue: 65000, primaryValue: 825000 },
+    { secondaryValue: 70000, primaryValue: 755000 }
   ];
 
-  return SankeyChart.fromEconomicSchedule(economicSchedule, {
-    optimalPayout: 350000,
-    charitDeduction: 300000
-  });
+  // Backward compatibility mapping
+  const economicSchedule = timeSeries.map(d => ({
+    distribution: d.secondaryValue,
+    remainder: d.primaryValue
+  }));
+
+  return SankeyChart.fromEconomicSchedule ? 
+    SankeyChart.fromEconomicSchedule(economicSchedule, {
+      optimalPayout: 350000,
+      charitDeduction: 300000
+    }) : {
+      timeSeries,
+      targetValue: 350000,
+      adjustment: 300000
+    };
 }
 
 function generateMultiSeriesData() {
@@ -504,51 +515,67 @@ function generateSingleLiquidFillData() {
   ];
 }
 
-function generateEconomicLiquidFillData() {
-  const economicData = {
+function generateAlternateLiquidFillData() {
+  const dataSet = {
+    timeSeries: [{ initialValue: 1000000 }],
+    adjustment: 350000,
+    // Backward compatibility
     economicSchedule: [{ beginningPrincipal: 1000000 }],
     charitDeduction: 350000
   };
   
-  return LiquidFillChart.fromEconomicData(economicData);
+  return LiquidFillChart.fromEconomicData ? 
+    LiquidFillChart.fromEconomicData(dataSet) : 
+    [{ title: 'Progress', value: Math.floor((dataSet.adjustment / dataSet.timeSeries[0].initialValue) * 100) }];
 }
 
 function generateRadialRemainderData() {
-  const years = 10;
+  const periods = 10;
   const initialValue = 1000000;
   const growthRate = 0.05;
   
-  const economicSchedule = [];
-  for (let i = 0; i < years; i++) {
-    const remainder = initialValue * Math.pow(1 + growthRate, i);
-    economicSchedule.push({ remainder: Math.floor(remainder) });
+  const timeSeries = [];
+  for (let i = 0; i < periods; i++) {
+    const value = initialValue * Math.pow(1 + growthRate, i);
+    timeSeries.push({ 
+      period: i + 1,
+      value: Math.floor(value),
+      remainder: Math.floor(value) // Keep for backward compatibility
+    });
   }
   
-  return { economicSchedule };
+  return { 
+    timeSeries,
+    economicSchedule: timeSeries.map(d => ({ remainder: d.remainder })) // Backward compatibility
+  };
 }
 
 function generateComplexRadialRemainderData() {
-  const years = 15;
+  const periods = 15;
   const initialValue = 1000000;
   
-  const economicSchedule = [];
-  for (let i = 0; i < years; i++) {
+  const timeSeries = [];
+  for (let i = 0; i < periods; i++) {
     // Variable growth rate with some volatility
     const baseGrowth = 0.05;
     const volatility = Math.sin(i * 0.5) * 0.02;
     const growthRate = baseGrowth + volatility;
     
-    const remainder = i === 0 ? initialValue : 
-      economicSchedule[i - 1].remainder * (1 + growthRate);
+    const value = i === 0 ? initialValue : 
+      timeSeries[i - 1].value * (1 + growthRate);
     
-    economicSchedule.push({ 
-      remainder: Math.floor(remainder),
-      year: i + 1,
+    timeSeries.push({ 
+      period: i + 1,
+      value: Math.floor(value),
+      remainder: Math.floor(value), // Keep for backward compatibility
       growthRate: growthRate
     });
   }
   
-  return { economicSchedule };
+  return { 
+    timeSeries,
+    economicSchedule: timeSeries.map(d => ({ remainder: d.remainder })) // Backward compatibility
+  };
 }
 
 function generateChordDiagramData() {
@@ -607,102 +634,126 @@ function generateComplexChordDiagramData() {
 }
 
 function generateForceDirectedData() {
-  const years = 8;
+  const periods = 8;
   const initialValue = 1000000;
-  const baseDistribution = 50000;
-  const charitDeduction = initialValue * 0.3;
-  const optimalPayout = initialValue * 0.25;
+  const baseFlow = 50000;
+  const adjustment = initialValue * 0.3;
+  const targetValue = initialValue * 0.25;
   
-  const economicSchedule = [];
-  for (let i = 0; i < years; i++) {
-    const remainder = initialValue * Math.pow(1.05, i);
-    const distribution = baseDistribution * (1 + i * 0.05);
+  const timeSeries = [];
+  for (let i = 0; i < periods; i++) {
+    const primaryValue = initialValue * Math.pow(1.05, i);
+    const secondaryValue = baseFlow * (1 + i * 0.05);
     
-    economicSchedule.push({ 
-      remainder: Math.floor(remainder),
-      distribution: Math.floor(distribution),
-      year: i + 1
+    timeSeries.push({ 
+      period: i + 1,
+      primaryValue: Math.floor(primaryValue),
+      secondaryValue: Math.floor(secondaryValue),
+      remainder: Math.floor(primaryValue), // Backward compatibility
+      distribution: Math.floor(secondaryValue) // Backward compatibility
     });
   }
   
   return {
-    economicSchedule,
-    charitDeduction,
-    optimalPayout
+    timeSeries,
+    economicSchedule: timeSeries.map(d => ({ remainder: d.remainder, distribution: d.distribution })), // Backward compatibility
+    adjustment,
+    targetValue,
+    charitDeduction: adjustment, // Backward compatibility
+    optimalPayout: targetValue // Backward compatibility
   };
 }
 
 function generateAnimatedBumpData() {
-  const years = 10;
+  const periods = 10;
   const initialValue = 1000000;
-  const baseDistribution = 50000;
+  const baseFlow = 50000;
   
-  const economicSchedule = [];
-  for (let i = 0; i < years; i++) {
-    const remainder = initialValue * Math.pow(1.05, i);
-    const distribution = baseDistribution * (1 + i * 0.05);
-    const income = distribution * 0.8; // Assume 80% of distribution is income
+  const timeSeries = [];
+  for (let i = 0; i < periods; i++) {
+    const primaryValue = initialValue * Math.pow(1.05, i);
+    const secondaryValue = baseFlow * (1 + i * 0.05);
+    const tertiaryValue = secondaryValue * 0.8; // Assume 80% of secondary is tertiary
     
-    economicSchedule.push({ 
-      remainder: Math.floor(remainder),
-      distribution: Math.floor(distribution),
-      income: Math.floor(income),
-      year: i + 1
+    timeSeries.push({ 
+      period: i + 1,
+      primaryValue: Math.floor(primaryValue),
+      secondaryValue: Math.floor(secondaryValue),
+      tertiaryValue: Math.floor(tertiaryValue),
+      remainder: Math.floor(primaryValue), // Backward compatibility
+      distribution: Math.floor(secondaryValue), // Backward compatibility
+      income: Math.floor(tertiaryValue) // Backward compatibility
     });
   }
   
   return {
-    economicSchedule
+    timeSeries,
+    economicSchedule: timeSeries.map(d => ({ 
+      remainder: d.remainder, 
+      distribution: d.distribution, 
+      income: d.income 
+    })) // Backward compatibility
   };
 }
 
 function generateRadialTimelineData() {
-  const years = 12;
+  const periods = 12;
   const initialValue = 1000000;
-  const baseDistribution = 50000;
+  const baseFlow = 50000;
   
-  const economicSchedule = [];
-  for (let i = 0; i < years; i++) {
-    const remainder = initialValue * Math.pow(1.05, i);
-    const distribution = baseDistribution * (1 + i * 0.05);
-    const income = distribution * 0.75; // Assume 75% of distribution is income
+  const timeSeries = [];
+  for (let i = 0; i < periods; i++) {
+    const primaryValue = initialValue * Math.pow(1.05, i);
+    const secondaryValue = baseFlow * (1 + i * 0.05);
+    const tertiaryValue = secondaryValue * 0.75; // Assume 75% of secondary is tertiary
     
-    economicSchedule.push({ 
-      remainder: Math.floor(remainder),
-      distribution: Math.floor(distribution),
-      income: Math.floor(income),
-      year: i + 1
+    timeSeries.push({ 
+      period: i + 1,
+      primaryValue: Math.floor(primaryValue),
+      secondaryValue: Math.floor(secondaryValue),
+      tertiaryValue: Math.floor(tertiaryValue),
+      remainder: Math.floor(primaryValue), // Backward compatibility
+      distribution: Math.floor(secondaryValue), // Backward compatibility
+      income: Math.floor(tertiaryValue) // Backward compatibility
     });
   }
   
   return {
-    economicSchedule
+    timeSeries,
+    economicSchedule: timeSeries.map(d => ({ 
+      remainder: d.remainder, 
+      distribution: d.distribution, 
+      income: d.income 
+    })) // Backward compatibility
   };
 }
 
 function generateFlowContainersData() {
-  const years = 8;
-  const baseAmount = 100000;
+  const periods = 8;
+  const baseValue = 100000;
   
   const containers = [];
-  for (let i = 0; i < years; i++) {
-    const year = 2024 + i;
-    const amount = baseAmount * (1 + Math.random() * 0.5); // Random growth
+  for (let i = 0; i < periods; i++) {
+    const period = i + 1;
+    const value = baseValue * (1 + Math.random() * 0.5); // Random growth
     const fillPercentage = 0.3 + Math.random() * 0.6; // 30-90% fill
     
     containers.push({
-      year,
-      amount: Math.floor(amount),
+      period,
+      year: 2024 + i, // Keep for backward compatibility
+      value: Math.floor(value),
+      amount: Math.floor(value), // Keep for backward compatibility
       fillPercentage,
-      label: `Year ${year}`,
-      category: i < 4 ? 'Growth Phase' : 'Maturity Phase'
+      label: `Period ${period}`,
+      category: i < 4 ? 'Phase A' : 'Phase B'
     });
   }
   
   return {
     containers,
-    totalAmount: containers.reduce((sum, c) => sum + c.amount, 0),
-    title: 'Financial Flow Containers'
+    totalValue: containers.reduce((sum, c) => sum + c.value, 0),
+    totalAmount: containers.reduce((sum, c) => sum + c.amount, 0), // Backward compatibility
+    title: 'Data Flow Containers'
   };
 }
 
@@ -1092,7 +1143,7 @@ window.toggleSankeyParticles = () => {
 };
 
 window.showEconomicSankey = () => {
-  sankeyChart.updateData(generateEconomicSankeyData());
+  sankeyChart.updateData(generateAlternateSankeyData());
 };
 
 window.updateLiquidFillChart = () => {
@@ -1112,7 +1163,7 @@ window.toggleLiquidFillMode = () => {
 
 window.showEconomicLiquidFill = () => {
   liquidFillChart.setDualGauge(true);
-  liquidFillChart.updateData(generateEconomicLiquidFillData());
+  liquidFillChart.updateData(generateAlternateLiquidFillData());
 };
 
 window.updateRadialRemainderChart = () => {

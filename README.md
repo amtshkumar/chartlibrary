@@ -1,27 +1,72 @@
-# D3 Chart Library
+# D3 Charts Visualization Library
 
-A comprehensive, customizable D3-based chart library for creating beautiful data visualizations.
+A comprehensive, production-ready D3-based chart library with 16+ chart types for creating stunning data visualizations.
 
-## Features
+## 🚀 Features
 
-- 🎯 **Multiple Chart Types**: Bar, Line, Pie, Donut, Scatter Plot, Area, and Histogram charts
+- 🎯 **16+ Chart Types**: From basic Bar/Line charts to advanced Spiral, Force-Directed, and Flow Container visualizations
 - 🎨 **Highly Customizable**: Extensive configuration options for colors, animations, and styling
-- 📱 **Responsive Design**: Charts adapt to container size changes
-- 🖱️ **Interactive**: Built-in hover effects, tooltips, and click handlers
-- 📊 **Data Processing**: Utility functions for data manipulation and formatting
-- 🎭 **Animations**: Smooth transitions and entrance animations
-- 🔧 **TypeScript Ready**: Full TypeScript support (coming soon)
+- 📱 **Responsive Design**: Charts automatically adapt to container size changes
+- 🖱️ **Interactive**: Built-in hover effects, tooltips, zoom, and click handlers
+- 📊 **Smart Data Processing**: Flexible data format support with automatic validation
+- 🎭 **Smooth Animations**: Beautiful entrance animations, transitions, and particle effects
+- 🛡️ **Production Ready**: Comprehensive error handling and edge case management
+- ⚡ **Performance Optimized**: Efficient rendering with D3.js v7+ under the hood
+- 🔧 **Framework Agnostic**: Works with React, Vue, Angular, or vanilla JavaScript
 
-## Installation
+## 📦 Installation
 
 ```bash
-npm install d3-chart-library
+npm install d3-charts-viz-library
 ```
+
+## 🎮 Interactive Playground
+
+Explore all chart types with live examples and interactive controls:
+
+```bash
+# Clone the repository
+git clone https://github.com/amtshkumar/chartlibrary.git
+cd chartlibrary
+
+# Install dependencies
+npm install
+
+# Start the playground
+npm run dev:playground
+```
+
+The playground includes:
+- 📊 Live chart examples with real-time updates
+- 🎮 Interactive controls for all chart options
+- 📝 Copy-to-clipboard code examples
+- 🔄 Data generators for testing different scenarios
+- 🎨 Visual customization options
+
+## ✨ Key Features
+
+### 🛡️ Production Ready
+- Comprehensive error handling and validation
+- Graceful handling of edge cases and invalid data
+- Memory-efficient rendering with optimized animations
+- Cross-browser compatibility (Chrome 60+, Firefox 55+, Safari 12+, Edge 79+)
+
+### 🎨 Advanced Animations
+- Smooth entrance and exit transitions
+- Physics-based particle systems
+- Breathing and pulsing effects
+- Interactive hover states and tooltips
+
+### 📊 Flexible Data Support
+- Multiple data format compatibility
+- Automatic data validation and sanitization
+- Support for time-series, categorical, and network data
+- Real-time data updates with smooth transitions
 
 ## Quick Start
 
 ```javascript
-import { BarChart } from 'd3-chart-library';
+import { BarChart } from 'd3-charts-viz-library';
 
 // Sample data
 const data = [
@@ -41,12 +86,16 @@ const chart = new BarChart('#chart-container', {
 chart.setData(data).render();
 ```
 
-## Chart Types
+## 📊 Chart Types
 
-### Bar Chart
+The library includes 16+ chart types, from basic visualizations to advanced animated charts:
+
+### 📊 Basic Charts
+
+#### Bar Chart
 
 ```javascript
-import { BarChart } from 'd3-chart-library';
+import { BarChart } from 'd3-charts-viz-library';
 
 const barChart = new BarChart('#container', {
   width: 800,
@@ -63,7 +112,7 @@ barChart.setData(data).render();
 ### Line Chart
 
 ```javascript
-import { LineChart } from 'd3-chart-library';
+import { LineChart } from 'd3-charts-viz-library';
 
 const lineChart = new LineChart('#container', {
   width: 800,
@@ -87,7 +136,7 @@ lineChart.setData(lineData).render();
 ### Pie Chart
 
 ```javascript
-import { PieChart } from 'd3-chart-library';
+import { PieChart } from 'd3-charts-viz-library';
 
 const pieChart = new PieChart('#container', {
   width: 600,
@@ -102,7 +151,7 @@ pieChart.setData(data).render();
 ### Donut Chart
 
 ```javascript
-import { DonutChart } from 'd3-chart-library';
+import { DonutChart } from 'd3-charts-viz-library';
 
 const donutChart = new DonutChart('#container', {
   width: 600,
@@ -118,7 +167,7 @@ donutChart.setData(data).render();
 ### Scatter Plot
 
 ```javascript
-import { ScatterPlot } from 'd3-chart-library';
+import { ScatterPlot } from 'd3-charts-viz-library';
 
 const scatterPlot = new ScatterPlot('#container', {
   width: 800,
@@ -139,7 +188,7 @@ scatterPlot.setData(scatterData).render();
 ### Area Chart
 
 ```javascript
-import { AreaChart } from 'd3-chart-library';
+import { AreaChart } from 'd3-charts-viz-library';
 
 const areaChart = new AreaChart('#container', {
   width: 800,
@@ -155,7 +204,7 @@ areaChart.setData(lineData).render();
 ### Histogram
 
 ```javascript
-import { Histogram } from 'd3-chart-library';
+import { Histogram } from 'd3-charts-viz-library';
 
 const histogram = new Histogram('#container', {
   width: 800,
@@ -167,6 +216,210 @@ const histogram = new Histogram('#container', {
 const histogramData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // Raw values
 
 histogram.setData(histogramData).render();
+```
+
+### 🎆 Advanced Charts
+
+#### Sankey Chart
+Flow diagrams showing data movement between nodes.
+
+```javascript
+import { SankeyChart } from 'd3-charts-viz-library';
+
+const sankeyChart = new SankeyChart('#container', {
+  width: 800,
+  height: 600,
+  nodeWidth: 15,
+  nodePadding: 10
+});
+
+const sankeyData = {
+  nodes: [
+    { name: 'Source A' },
+    { name: 'Source B' },
+    { name: 'Target X' },
+    { name: 'Target Y' }
+  ],
+  links: [
+    { source: 0, target: 2, value: 10 },
+    { source: 1, target: 3, value: 15 }
+  ]
+};
+
+sankeyChart.setData(sankeyData).render();
+```
+
+#### Liquid Fill Chart
+Animated liquid-filled containers with wave effects.
+
+```javascript
+import { LiquidFillChart } from 'd3-charts-viz-library';
+
+const liquidChart = new LiquidFillChart('#container', {
+  width: 400,
+  height: 400,
+  liquidColor: '#3498db',
+  showWaves: true,
+  animationDuration: 2000
+});
+
+liquidChart.setData({ percentage: 0.75, label: '75%' }).render();
+```
+
+#### Chord Diagram Chart
+Circular layout showing relationships between entities.
+
+```javascript
+import { ChordDiagramChart } from 'd3-charts-viz-library';
+
+const chordChart = new ChordDiagramChart('#container', {
+  width: 600,
+  height: 600,
+  innerRadius: 200,
+  outerRadius: 220
+});
+
+const matrix = [
+  [0, 5, 6, 4],
+  [7, 0, 4, 2],
+  [8, 4, 0, 8],
+  [3, 5, 9, 0]
+];
+
+chordChart.setData({ matrix, labels: ['A', 'B', 'C', 'D'] }).render();
+```
+
+#### Force Directed Chart
+Network visualization with physics-based node positioning.
+
+```javascript
+import { ForceDirectedChart } from 'd3-charts-viz-library';
+
+const forceChart = new ForceDirectedChart('#container', {
+  width: 800,
+  height: 600,
+  showParticles: true,
+  showGlowEffects: true,
+  enableZoom: true
+});
+
+const networkData = {
+  economicSchedule: [
+    { remainder: 100000, distribution: 5000 },
+    { remainder: 110000, distribution: 5500 }
+  ]
+};
+
+forceChart.setData(networkData).render();
+```
+
+#### Radial Timeline Chart
+Circular timeline with animated arcs and data points.
+
+```javascript
+import { RadialTimelineChart } from 'd3-charts-viz-library';
+
+const radialChart = new RadialTimelineChart('#container', {
+  width: 500,
+  height: 500,
+  innerRadius: 40,
+  showGridLines: true,
+  animationDuration: 1000
+});
+
+const timelineData = {
+  economicSchedule: [
+    { remainder: 100000, distribution: 5000 },
+    { remainder: 110000, distribution: 5500 },
+    { remainder: 125000, distribution: 6000 }
+  ]
+};
+
+radialChart.setData(timelineData).render();
+```
+
+#### Flow Containers Chart
+Animated containers with liquid filling and particle effects.
+
+```javascript
+import { FlowContainersChart } from 'd3-charts-viz-library';
+
+const flowChart = new FlowContainersChart('#container', {
+  width: 800,
+  height: 600,
+  showParticles: true,
+  showBubbles: true,
+  animationDuration: 2000
+});
+
+const containerData = {
+  containers: [
+    { year: 2024, amount: 120000, fillPercentage: 0.65 },
+    { year: 2025, amount: 135000, fillPercentage: 0.72 }
+  ]
+};
+
+flowChart.setData(containerData).render();
+```
+
+#### Spiral Chart 🆕
+Spiral visualization with floating particles and breathing animations.
+
+```javascript
+import { SpiralChart } from 'd3-charts-viz-library';
+
+const spiralChart = new SpiralChart('#container', {
+  width: 800,
+  height: 600,
+  turns: 4,
+  showParticles: true,
+  showFlowLines: true,
+  showBreathing: true,
+  centerLabel: 'Data Flow'
+});
+
+const spiralData = {
+  timeSeries: [
+    { period: 1, primaryValue: 100000, secondaryValue: 25000 },
+    { period: 2, primaryValue: 110000, secondaryValue: 28000 },
+    { period: 3, primaryValue: 125000, secondaryValue: 32000 }
+  ]
+};
+
+spiralChart.setData(spiralData).render();
+```
+
+#### Animated Bump Chart
+Animated area chart showing component breakdown over time.
+
+```javascript
+import { AnimatedBumpChart } from 'd3-charts-viz-library';
+
+const bumpChart = new AnimatedBumpChart('#container', {
+  width: 800,
+  height: 500,
+  principalRatio: 0.6,
+  showDistributionBars: true,
+  showPoints: true
+});
+
+bumpChart.setData(timelineData).render();
+```
+
+#### Radial Remainder Chart
+Spiral visualization showing growth patterns over time.
+
+```javascript
+import { RadialRemainderChart } from 'd3-charts-viz-library';
+
+const radialRemainderChart = new RadialRemainderChart('#container', {
+  width: 600,
+  height: 600,
+  spiralRotations: 2,
+  animationDuration: 3000
+});
+
+radialRemainderChart.setData(timelineData).render();
 ```
 
 ## Multi-Series Charts
@@ -201,7 +454,7 @@ areaChart.renderStacked(seriesData);
 The library includes utility functions for data processing:
 
 ```javascript
-import { DataUtils, ColorUtils, MathUtils } from 'd3-chart-library';
+import { DataUtils, ColorUtils, MathUtils } from 'd3-charts-viz-library';
 
 // Generate sample data
 const sampleData = DataUtils.generateSampleData('linear', 50);
@@ -246,7 +499,7 @@ Each chart type has its own specific options. Refer to the individual chart docu
 Make your charts responsive:
 
 ```javascript
-import { DOMUtils } from 'd3-chart-library';
+import { DOMUtils } from 'd3-charts-viz-library';
 
 const chart = new BarChart('#container');
 const container = document.getElementById('container');
@@ -260,7 +513,7 @@ DOMUtils.makeResponsive(chart, container);
 Export charts as images:
 
 ```javascript
-import { DOMUtils } from 'd3-chart-library';
+import { DOMUtils } from 'd3-charts-viz-library';
 
 const svgElement = document.querySelector('#container svg');
 DOMUtils.exportAsImage(svgElement, 'my-chart.png');
@@ -315,7 +568,50 @@ const chart = new BarChart('#container', {
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## 🛡️ Production Ready
+
+This library has undergone comprehensive testing and bug fixes to ensure production reliability:
+
+### ✅ Recent Bug Fixes (v1.0.10)
+- **RadialTimelineChart**: Fixed "Expected number" SVG path errors with robust validation
+- **FlowContainersChart**: Resolved context issues and infinite recursion bugs
+- **ForceDirectedChart**: Enhanced coordinate validation for stable animations
+- **All Charts**: Added comprehensive error handling for edge cases and invalid data
+
+### 🎆 Error Handling
+- Graceful handling of NaN, Infinity, and undefined values
+- Automatic fallbacks for invalid data inputs
+- Comprehensive validation in all animation transitions
+- Production-ready stability with edge case management
+
 ## Changelog
+
+### v1.0.10 (Latest)
+- ✨ **NEW**: Added SpiralChart with floating particles and breathing animations
+- 🔧 **FIXED**: RadialTimelineChart SVG path validation and animation safety
+- 🔧 **FIXED**: FlowContainersChart context issues and recursive method calls
+- 🔧 **FIXED**: ForceDirectedChart coordinate validation
+- 📚 **UPDATED**: Comprehensive README with all chart types
+
+### v1.0.9
+- ✨ **NEW**: Added FlowContainersChart with liquid animations
+- 🔧 **FIXED**: Multiple chart stability improvements
+- 🎮 **ENHANCED**: Playground integration for all charts
+
+### v1.0.8
+- ✨ **NEW**: Added ForceDirectedChart and AnimatedBumpChart
+- 🎆 **ENHANCED**: Advanced particle effects and animations
+- 🔧 **IMPROVED**: Generic naming conventions for broader applicability
+
+### v1.0.7
+- ✨ **NEW**: Added RadialRemainderChart with spiral visualizations
+- 🎮 **ENHANCED**: Interactive playground with live examples
+- 📊 **IMPROVED**: Data processing and validation
+
+### v1.0.6
+- ✨ **NEW**: Added advanced chart types (Sankey, Liquid Fill, Chord Diagram)
+- 🎨 **ENHANCED**: Visual effects and animations
+- 🔧 **IMPROVED**: Code organization and modularity
 
 ### v1.0.0
 - Initial release
