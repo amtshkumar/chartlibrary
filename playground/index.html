@@ -617,6 +617,24 @@
                     <pre id="radial-stacked-bar-code"></pre>
                 </div>
             </div>
+
+            <!-- Calendar Heatmap Chart -->
+            <div class="chart-card">
+                <div class="chart-title">📅 Calendar Heatmap Chart</div>
+                <div id="calendar-heatmap-chart" class="chart-container">
+                    <div class="loading"></div>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="updateCalendarHeatmapChart()">🔄 Update Data</button>
+                    <button class="btn secondary" onclick="changeCalendarColorScheme()">🎨 Change Color Scheme</button>
+                    <button class="btn secondary" onclick="changeCalendarYear()">📅 Change Year</button>
+                    <button class="btn secondary" onclick="toggleCalendarAnimation()">✨ Toggle Animation</button>
+                </div>
+                <div class="code-example">
+                    <button class="copy-btn" onclick="copyToClipboard(calendarHeatmapChartCode)">Copy</button>
+                    <pre id="calendar-heatmap-code"></pre>
+                </div>
+            </div>
         </div>
     </div>
 

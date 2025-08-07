@@ -17,12 +17,13 @@ import {
   FlowContainersChart,
   SpiralChart,
   RadialStackedBarChart,
+  CalendarHeatmapChart,
   DataUtils,
   ColorUtils
 } from 'd3-charts-viz-library';
 
 // Global chart instances
-let barChart, lineChart, pieChart, donutChart, scatterPlot, areaChart, histogram, sankeyChart, liquidFillChart, radialRemainderChart, chordDiagramChart, forceDirectedChart, animatedBumpChart, radialTimelineChart, flowContainersChart, spiralChart, radialStackedBarChart;
+let barChart, lineChart, pieChart, donutChart, scatterPlot, areaChart, histogram, sankeyChart, liquidFillChart, radialRemainderChart, chordDiagramChart, forceDirectedChart, animatedBumpChart, radialTimelineChart, flowContainersChart, spiralChart, radialStackedBarChart, calendarHeatmapChart;
 let isMultiSeries = false;
 let showTrendLine = false;
 let showDensity = false;
@@ -396,6 +397,33 @@ const data = [
 ];
 
 radialStackedBarChart.setData(data).render();`;
+
+const calendarHeatmapChartCode = `const calendarHeatmapChart = new CalendarHeatmapChart('#calendar-heatmap-chart', {
+  width: 900,
+  height: 200,
+  colorScheme: 'green', // 'green', 'blue', 'purple', or 'orange'
+  year: 2024,
+  showTooltip: true,
+  showLegend: true,
+  animated: true
+});
+
+const data = [
+  { date: '2024-01-15', value: 12 },
+  { date: '2024-02-20', value: 8 },
+  { date: '2024-03-10', value: 15 },
+  { date: '2024-04-05', value: 22 },
+  { date: '2024-05-12', value: 18 },
+  { date: '2024-06-08', value: 25 },
+  { date: '2024-07-14', value: 30 },
+  { date: '2024-08-22', value: 28 },
+  { date: '2024-09-17', value: 20 },
+  { date: '2024-10-11', value: 16 },
+  { date: '2024-11-25', value: 14 },
+  { date: '2024-12-18', value: 10 }
+];
+
+calendarHeatmapChart.setData(data).render();`;
 
 // Data generators
 function generateBarData() {
@@ -857,6 +885,52 @@ function generateRadialStackedBarData() {
   return data;
 }
 
+function generateCalendarHeatmapData(year = 2024) {
+  const data = [];
+  const startDate = new Date(year, 0, 1);
+  const endDate = new Date(year, 11, 31);
+  
+  // Generate random activity data for the year
+  const currentDate = new Date(startDate);
+  while (currentDate <= endDate) {
+    // Create some patterns: higher activity on weekdays, some seasonal variation
+    const dayOfWeek = currentDate.getDay();
+    const month = currentDate.getMonth();
+    
+    let baseActivity = 0;
+    
+    // Weekend vs weekday pattern
+    if (dayOfWeek === 0 || dayOfWeek === 6) {
+      baseActivity = Math.random() * 5; // Lower weekend activity
+    } else {
+      baseActivity = Math.random() * 15 + 5; // Higher weekday activity
+    }
+    
+    // Seasonal variation (higher in middle months)
+    const seasonalMultiplier = 0.5 + 0.5 * Math.sin((month / 12) * 2 * Math.PI + Math.PI/2);
+    baseActivity *= seasonalMultiplier;
+    
+    // Add some random spikes
+    if (Math.random() < 0.1) {
+      baseActivity *= 2;
+    }
+    
+    // Some days have no activity
+    if (Math.random() < 0.2) {
+      baseActivity = 0;
+    }
+    
+    data.push({
+      date: new Date(currentDate),
+      value: Math.floor(baseActivity)
+    });
+    
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+  
+  return data;
+}
+
 // Initialize charts
 function initializeCharts() {
   // Bar Chart
@@ -1045,6 +1119,18 @@ function initializeCharts() {
   });
   radialStackedBarChart.setData(generateRadialStackedBarData()).render();
 
+  // Calendar Heatmap Chart
+  calendarHeatmapChart = new CalendarHeatmapChart('#calendar-heatmap-chart', {
+    width: 900,
+    height: 200,
+    colorScheme: 'green',
+    year: 2024,
+    showTooltip: true,
+    showLegend: true,
+    animated: true
+  });
+  calendarHeatmapChart.setData(generateCalendarHeatmapData(2024)).render();
+
   // Update code examples
   updateCodeExamples();
 }
@@ -1067,6 +1153,7 @@ function updateCodeExamples() {
   document.getElementById('flow-containers-code').textContent = flowContainersChartCode;
   document.getElementById('spiral-code').textContent = spiralChartCode;
   document.getElementById('radial-stacked-bar-code').textContent = radialStackedBarChartCode;
+  document.getElementById('calendar-heatmap-code').textContent = calendarHeatmapChartCode;
 }
 
 // Global functions for button interactions
@@ -1394,6 +1481,35 @@ window.toggleRadialLegend = () => {
   radialStackedBarChart.render();
 };
 
+// Calendar Heatmap Chart controls
+window.updateCalendarHeatmapChart = () => {
+  const currentYear = calendarHeatmapChart.options.year;
+  calendarHeatmapChart.setData(generateCalendarHeatmapData(currentYear)).render();
+};
+
+window.changeCalendarColorScheme = () => {
+  const colorSchemes = ['green', 'blue', 'purple', 'orange'];
+  const currentScheme = calendarHeatmapChart.options.colorScheme;
+  const currentIndex = colorSchemes.indexOf(currentScheme);
+  const nextScheme = colorSchemes[(currentIndex + 1) % colorSchemes.length];
+  calendarHeatmapChart.updateColorScheme(nextScheme);
+};
+
+window.changeCalendarYear = () => {
+  const years = [2020, 2021, 2022, 2023, 2024];
+  const currentYear = calendarHeatmapChart.options.year;
+  const currentIndex = years.indexOf(currentYear);
+  const nextYear = years[(currentIndex + 1) % years.length];
+  calendarHeatmapChart.updateYear(nextYear);
+  calendarHeatmapChart.setData(generateCalendarHeatmapData(nextYear)).render();
+};
+
+window.toggleCalendarAnimation = () => {
+  const currentAnimated = calendarHeatmapChart.options.animated;
+  calendarHeatmapChart.options.animated = !currentAnimated;
+  calendarHeatmapChart.render();
+};
+
 // Copy to clipboard function
 window.copyToClipboard = (text) => {
   navigator.clipboard.writeText(text).then(() => {
@@ -1420,6 +1536,7 @@ window.areaChartCode = areaChartCode;
 window.histogramCode = histogramCode;
 window.sankeyChartCode = sankeyChartCode;
 window.radialStackedBarChartCode = radialStackedBarChartCode;
+window.calendarHeatmapChartCode = calendarHeatmapChartCode;
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
