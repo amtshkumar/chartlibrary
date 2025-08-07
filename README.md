@@ -1,10 +1,10 @@
 # D3 Charts Visualization Library
 
-A comprehensive, production-ready D3-based chart library with 17+ chart types for creating stunning data visualizations.
+A comprehensive, production-ready D3-based chart library with 18+ chart types for creating stunning data visualizations.
 
 ## 🚀 Features
 
-- 🎯 **17+ Chart Types**: From basic Bar/Line charts to advanced Spiral, Force-Directed, and Radial Stacked visualizations
+- 🎯 **18+ Chart Types**: From basic Bar/Line charts to advanced Spiral, Force-Directed, Calendar Heatmap, and Radial Stacked visualizations
 - 🎨 **Highly Customizable**: Extensive configuration options for colors, animations, and styling
 - 📱 **Responsive Design**: Charts automatically adapt to container size changes
 - 🖱️ **Interactive**: Built-in hover effects, tooltips, zoom, and click handlers
@@ -88,7 +88,7 @@ chart.setData(data).render();
 
 ## 📊 Chart Types
 
-The library includes 17+ chart types, from basic visualizations to advanced animated charts:
+The library includes 18+ chart types, from basic visualizations to advanced animated charts:
 
 ### 📊 Basic Charts
 
@@ -464,6 +464,40 @@ const data = [
 radialStackedBarChart.setData(data).render();
 ```
 
+#### Calendar Heatmap Chart
+GitHub-style calendar visualization for displaying activity patterns over time.
+
+```javascript
+import { CalendarHeatmapChart } from 'd3-charts-viz-library';
+
+const calendarChart = new CalendarHeatmapChart('#container', {
+  width: 900,
+  height: 200,
+  colorScheme: 'green', // 'green', 'blue', 'purple', or 'orange'
+  year: 2024,
+  showTooltip: true,
+  showLegend: true,
+  animated: true
+});
+
+const data = [
+  { date: '2024-01-15', value: 12 },
+  { date: '2024-02-20', value: 8 },
+  { date: '2024-03-10', value: 15 },
+  { date: '2024-04-05', value: 22 },
+  { date: '2024-05-12', value: 18 },
+  { date: '2024-06-08', value: 25 },
+  { date: '2024-07-14', value: 30 },
+  { date: '2024-08-22', value: 28 },
+  { date: '2024-09-17', value: 20 },
+  { date: '2024-10-11', value: 16 },
+  { date: '2024-11-25', value: 14 },
+  { date: '2024-12-18', value: 10 }
+];
+
+calendarChart.setData(data).render();
+```
+
 ## Multi-Series Charts
 
 ### Multi-Line Chart
@@ -628,7 +662,24 @@ This library has undergone comprehensive testing and bug fixes to ensure product
 
 ## Changelog
 
-### v1.0.11 (Latest)
+### v1.0.15 (Latest)
+- ✨ **NEW**: Added CalendarHeatmapChart with GitHub-style calendar visualization
+  - Beautiful calendar grid showing activity patterns over a full year
+  - Four color schemes: green (GitHub style), blue, purple, and orange
+  - Interactive hover tooltips with date and value information
+  - Configurable options: year selection, animation, legend, tooltips
+  - Automatic weekend vs weekday pattern generation
+  - Month and weekday labels with seasonal variation simulation
+- 🎮 **IMPROVED**: Interactive playground with 13 chart types
+  - Added CalendarHeatmapChart to playground with full interactive controls
+  - New controls: Update Data, Change Color Scheme, Change Year, Toggle Animation
+  - Realistic activity data generator with patterns and seasonal variations
+- 📚 **UPDATED**: Comprehensive documentation and examples
+  - Complete README section with Calendar Heatmap usage examples
+  - Updated chart count from 17+ to 18+ chart types
+  - Added sample code with date-based data structure
+
+### v1.0.11
 - ✨ **NEW**: Added RadialStackedBarChart with concentric rings and stacked segments
   - Beautiful radial visualization with year-over-year data in concentric rings
   - Three color schemes: blue, orange, and green
