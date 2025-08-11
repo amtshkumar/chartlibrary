@@ -1,10 +1,10 @@
 # D3 Charts Visualization Library
 
-A comprehensive, production-ready D3-based chart library with 19+ chart types for creating stunning data visualizations.
+A comprehensive, production-ready D3-based chart library with **30 chart types** for creating stunning data visualizations.
 
 ## 🚀 Features
 
-- 🎯 **19+ Chart Types**: From basic Bar/Line charts to advanced Spiral, Force-Directed, Calendar Heatmap, Animated Bubble, and Radial Stacked visualizations
+- 🎯 **30 Chart Types**: Complete visualization suite from basic Bar/Line charts to advanced Sunburst, Parallel Coordinates, Stream, Violin, and Network visualizations
 - 🎨 **Highly Customizable**: Extensive configuration options for colors, animations, and styling
 - 📱 **Responsive Design**: Charts automatically adapt to container size changes
 - 🖱️ **Interactive**: Built-in hover effects, tooltips, zoom, and click handlers
@@ -88,7 +88,17 @@ chart.setData(data).render();
 
 ## 📊 Chart Types
 
-The library includes 19+ chart types, from basic visualizations to advanced animated charts:
+The library includes **30 chart types**, from basic visualizations to advanced statistical and network charts:
+
+### 🎯 **Complete Chart Collection**
+
+**Basic Charts (7)**: BarChart, LineChart, PieChart, DonutChart, ScatterPlot, AreaChart, Histogram
+
+**Advanced Visualizations (8)**: SankeyChart, LiquidFillChart, RadialRemainderChart, ChordDiagramChart, ForceDirectedChart, AnimatedBumpChart, RadialTimelineChart, FlowContainersChart
+
+**Specialized Charts (10)**: SpiralChart, RadialStackedBarChart, CalendarHeatmapChart, AnimatedBubbleChart, TreemapChart, GaugeChart, WaterfallChart, RadarChart, HeatmapChart
+
+**Advanced Analytics (5)**: SunburstChart, ParallelCoordinatesChart, StreamChart, ViolinChart, NetworkChart
 
 ### 📊 Basic Charts
 
@@ -700,29 +710,29 @@ This library has undergone comprehensive testing and bug fixes to ensure product
 
 ## Changelog
 
-### v1.0.16 (Latest)
-- ✨ **NEW**: Added AnimatedBubbleChart with time-based smooth animations
-  - Generic time-aware bubble chart for comparing two numeric metrics with bubble size
-  - Smooth animated transitions between time periods with configurable duration
-  - Interactive play/pause controls for automatic period animation
-  - Stable axes with precomputed domains for consistent scaling across periods
-  - Configurable data fields: x, y, size, category, time period, and unique ID
-  - Beautiful bubble animations with size transitions and position morphing
-  - Period watermark display and interactive legend support
-- 🎮 **ENHANCED**: Interactive playground with 14 chart types
-  - Added AnimatedBubbleChart to playground with full interactive controls
-  - New controls: Update Data, Play/Pause Animation, Prev/Next Period, Toggle Legend
-  - Realistic multi-period data generator with growth patterns and category drift
-  - Copy-to-clipboard functionality for complete code examples
-- 🔧 **IMPROVED**: Animation performance and smoothness
-  - Optimized render method to avoid clearing entire chart area on period changes
-  - Enhanced bubble transitions with separate circle radius and position animations
-  - Better text label interpolation with smooth value transitions
-  - Improved exit animations with gradual bubble shrinking
-- 📚 **UPDATED**: Comprehensive documentation and examples
-  - Complete README section with AnimatedBubbleChart usage examples
-  - Updated chart count from 18+ to 19+ chart types
-  - Added sample code with time-series bubble data structure
+### v1.0.17 - **COMPLETE LIBRARY RELEASE** 🎉
+- ✨ **NEW**: Added 5 Advanced Analytics Charts - **Library now complete with 30 chart types!**
+  - **SunburstChart**: Multi-level hierarchical radial visualization with zoom-to-segment functionality
+  - **ParallelCoordinatesChart**: Multi-dimensional data analysis with interactive brushing and filtering
+  - **StreamChart**: Flowing stacked area chart with multiple offset algorithms (wiggle, silhouette, expand)
+  - **ViolinChart**: Distribution visualization with kernel density estimation and integrated box plots
+  - **NetworkChart**: Interactive force-directed node-link diagrams with drag, zoom, and physics simulation
+- 🔧 **MAJOR FIXES**: Resolved critical JavaScript context and SVG rendering errors
+  - Fixed D3.js context binding issues in ParallelCoordinatesChart and ViolinChart
+  - Resolved invalid SVG arc path generation in SunburstChart with robust validation
+  - Added comprehensive null checks and error handling for brush interactions
+  - Implemented arc sanitization and filtering for stable rendering
+- 🎮 **COMPLETE**: Interactive playground with all 30 chart types
+  - Full integration of advanced charts with interactive controls and data generators
+  - Comprehensive code examples with copy-to-clipboard functionality
+  - Advanced chart-specific controls (brushing, forces, bandwidth, zoom, etc.)
+  - Realistic data generators for all chart types including hierarchical, multi-dimensional, and network data
+- 📚 **COMPREHENSIVE**: Complete documentation and examples
+  - Updated README with all 30 chart types organized by category
+  - Advanced analytics section with detailed usage examples
+  - Complete API documentation for all chart configurations
+  - Production-ready examples with realistic data structures
+- 🏆 **MILESTONE**: **D3 Charts Viz Library is now complete with 30 production-ready chart types!**
 
 ### v1.0.15
 - ✨ **NEW**: Added CalendarHeatmapChart with GitHub-style calendar visualization

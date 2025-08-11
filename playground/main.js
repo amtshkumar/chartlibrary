@@ -19,12 +19,22 @@ import {
   RadialStackedBarChart,
   CalendarHeatmapChart,
   AnimatedBubbleChart,
+  TreemapChart,
+  GaugeChart,
+  WaterfallChart,
+  RadarChart,
+  HeatmapChart,
+  SunburstChart,
+  ParallelCoordinatesChart,
+  StreamChart,
+  ViolinChart,
+  NetworkChart,
   DataUtils,
   ColorUtils
-} from 'd3-charts-viz-library';
+} from '../dist/index.esm.js';
 
 // Global chart instances
-let barChart, lineChart, pieChart, donutChart, scatterPlot, areaChart, histogram, sankeyChart, liquidFillChart, radialRemainderChart, chordDiagramChart, forceDirectedChart, animatedBumpChart, radialTimelineChart, flowContainersChart, spiralChart, radialStackedBarChart, calendarHeatmapChart, animatedBubbleChart;
+let barChart, lineChart, pieChart, donutChart, scatterPlot, areaChart, histogram, sankeyChart, liquidFillChart, radialRemainderChart, chordDiagramChart, forceDirectedChart, animatedBumpChart, radialTimelineChart, flowContainersChart, spiralChart, radialStackedBarChart, calendarHeatmapChart, animatedBubbleChart, treemapChart, gaugeChart, waterfallChart, radarChart, heatmapChart, sunburstChart, parallelCoordinatesChart, streamChart, violinChart, networkChart;
 let isMultiSeries = false;
 let showTrendLine = false;
 let showDensity = false;
@@ -451,6 +461,245 @@ const data = [
 ];
 
 animatedBubbleChart.setData(data).setPeriod(0);`;
+
+const treemapChartCode = `const treemapChart = new TreemapChart('#treemap-chart', {
+  width: 600,
+  height: 400,
+  colorScheme: 'category10',
+  animation: true,
+  tooltips: true,
+  padding: 2
+});
+
+const data = {
+  name: "Technology Stack",
+  children: [
+    {
+      name: "Frontend",
+      children: [
+        { name: "React", value: 45 },
+        { name: "Vue", value: 30 },
+        { name: "Angular", value: 25 }
+      ]
+    },
+    {
+      name: "Backend", 
+      children: [
+        { name: "Node.js", value: 40 },
+        { name: "Python", value: 35 },
+        { name: "Java", value: 30 }
+      ]
+    }
+  ]
+};
+
+treemapChart.setData(data).render();`;
+
+const gaugeChartCode = `const gaugeChart = new GaugeChart('#gauge-chart', {
+  width: 400,
+  height: 300,
+  colorScheme: 'traffic',
+  animation: true,
+  showValue: true,
+  showTicks: true
+});
+
+const data = {
+  value: 75,
+  min: 0,
+  max: 100,
+  label: "Performance Score"
+};
+
+gaugeChart.setData(data).render();`;
+
+const waterfallChartCode = `const waterfallChart = new WaterfallChart('#waterfall-chart', {
+  width: 600,
+  height: 400,
+  colorScheme: 'default',
+  animation: true,
+  tooltips: true,
+  showConnectors: true,
+  showValues: true
+});
+
+const data = [
+  { label: "Starting Revenue", value: 100, type: "total" },
+  { label: "Product Sales", value: 25 },
+  { label: "Service Revenue", value: 15 },
+  { label: "Operating Costs", value: -30 },
+  { label: "Marketing", value: -8 },
+  { label: "Net Income", value: 102, type: "total" }
+];
+
+waterfallChart.setData(data).render();`;
+
+const radarChartCode = `const radarChart = new RadarChart('#radar-chart', {
+  width: 500,
+  height: 500,
+  colorScheme: 'category10',
+  levels: 5,
+  maxValue: 100,
+  animation: true,
+  tooltips: true,
+  legend: true
+});
+
+const data = [
+  {
+    name: "Product A",
+    values: [
+      { axis: "Speed", value: 80 },
+      { axis: "Reliability", value: 90 },
+      { axis: "Security", value: 70 },
+      { axis: "Usability", value: 85 }
+    ]
+  },
+  {
+    name: "Product B",
+    values: [
+      { axis: "Speed", value: 70 },
+      { axis: "Reliability", value: 75 },
+      { axis: "Security", value: 95 },
+      { axis: "Usability", value: 80 }
+    ]
+  }
+];
+
+radarChart.setData(data).render();`;
+
+const heatmapChartCode = `const heatmapChart = new HeatmapChart('#heatmap-chart', {
+  width: 600,
+  height: 400,
+  colorScheme: 'blues',
+  animation: true,
+  tooltips: true,
+  showValues: false
+});
+
+const data = [
+  { row: "Monday", column: "08:00", value: 45 },
+  { row: "Monday", column: "12:00", value: 78 },
+  { row: "Monday", column: "16:00", value: 62 },
+  { row: "Tuesday", column: "08:00", value: 52 },
+  { row: "Tuesday", column: "12:00", value: 85 },
+  { row: "Tuesday", column: "16:00", value: 70 }
+];
+
+heatmapChart.setData(data).render();`;
+
+const sunburstChartCode = `const sunburstChart = new SunburstChart('#sunburst-chart', {
+  width: 600,
+  height: 600,
+  colorScheme: 'category10',
+  animation: true,
+  tooltips: true
+});
+
+const data = {
+  name: "Root",
+  children: [
+    {
+      name: "Technology",
+      children: [
+        { name: "Frontend", value: 30 },
+        { name: "Backend", value: 25 },
+        { name: "DevOps", value: 15 }
+      ]
+    },
+    {
+      name: "Marketing",
+      children: [
+        { name: "Digital", value: 20 },
+        { name: "Traditional", value: 10 }
+      ]
+    }
+  ]
+};
+
+sunburstChart.setData(data).render();`;
+
+const parallelCoordinatesChartCode = `const parallelCoordinatesChart = new ParallelCoordinatesChart('#parallel-coordinates-chart', {
+  width: 800,
+  height: 400,
+  colorScheme: 'category10',
+  animation: true,
+  tooltips: true,
+  brushing: true
+});
+
+const data = [
+  { name: "Item 1", price: 100, quality: 8, popularity: 7, rating: 4.5 },
+  { name: "Item 2", price: 150, quality: 9, popularity: 6, rating: 4.2 },
+  { name: "Item 3", price: 80, quality: 6, popularity: 9, rating: 4.8 }
+];
+
+parallelCoordinatesChart.setData(data).render();`;
+
+const streamChartCode = `const streamChart = new StreamChart('#stream-chart', {
+  width: 800,
+  height: 400,
+  colorScheme: 'spectral',
+  animation: true,
+  tooltips: true,
+  legend: true,
+  curve: 'cardinal',
+  offset: 'wiggle'
+});
+
+const data = [
+  { date: new Date('2020-01-01'), category1: 20, category2: 30, category3: 15 },
+  { date: new Date('2020-02-01'), category1: 25, category2: 35, category3: 20 },
+  { date: new Date('2020-03-01'), category1: 30, category2: 25, category3: 25 }
+];
+
+streamChart.setData(data).render();`;
+
+const violinChartCode = `const violinChart = new ViolinChart('#violin-chart', {
+  width: 600,
+  height: 400,
+  colorScheme: 'category10',
+  animation: true,
+  tooltips: true,
+  showBoxPlot: true,
+  showMedian: true
+});
+
+const data = [
+  { category: "Group A", values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+  { category: "Group B", values: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20] },
+  { category: "Group C", values: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50] }
+];
+
+violinChart.setData(data).render();`;
+
+const networkChartCode = `const networkChart = new NetworkChart('#network-chart', {
+  width: 700,
+  height: 500,
+  colorScheme: 'category10',
+  animation: true,
+  tooltips: true,
+  showLabels: true,
+  nodeRadius: 8,
+  linkStrength: 0.1,
+  chargeStrength: -300
+});
+
+const data = {
+  nodes: [
+    { id: "A", group: 1 },
+    { id: "B", group: 1 },
+    { id: "C", group: 2 },
+    { id: "D", group: 2 }
+  ],
+  links: [
+    { source: "A", target: "B", value: 1 },
+    { source: "B", target: "C", value: 2 },
+    { source: "C", target: "D", value: 1 }
+  ]
+};
+
+networkChart.setData(data).render();`;
 
 // Data generators
 function generateBarData() {
@@ -952,6 +1201,234 @@ function generateCalendarHeatmapData(year = 2024) {
   return data;
 }
 
+// Data generators for new charts
+function generateTreemapData() {
+  return {
+    name: "Technology Stack",
+    children: [
+      {
+        name: "Frontend",
+        children: [
+          { name: "React", value: 45 },
+          { name: "Vue", value: 30 },
+          { name: "Angular", value: 25 },
+          { name: "Svelte", value: 15 }
+        ]
+      },
+      {
+        name: "Backend",
+        children: [
+          { name: "Node.js", value: 40 },
+          { name: "Python", value: 35 },
+          { name: "Java", value: 30 },
+          { name: "Go", value: 20 }
+        ]
+      },
+      {
+        name: "Database",
+        children: [
+          { name: "PostgreSQL", value: 35 },
+          { name: "MongoDB", value: 30 },
+          { name: "Redis", value: 20 },
+          { name: "MySQL", value: 25 }
+        ]
+      }
+    ]
+  };
+}
+
+function generateGaugeData() {
+  return {
+    value: Math.random() * 100,
+    min: 0,
+    max: 100,
+    label: "Performance Score"
+  };
+}
+
+function generateWaterfallData() {
+  return [
+    { label: "Starting Revenue", value: 100, type: "total" },
+    { label: "Product Sales", value: 25 },
+    { label: "Service Revenue", value: 15 },
+    { label: "Operating Costs", value: -30 },
+    { label: "Marketing", value: -8 },
+    { label: "R&D", value: -12 },
+    { label: "Net Income", value: 90, type: "total" }
+  ];
+}
+
+function generateRadarData() {
+  const axes = ["Speed", "Reliability", "Security", "Usability", "Performance", "Scalability"];
+  return [
+    {
+      name: "Product A",
+      values: axes.map(axis => ({
+        axis,
+        value: Math.random() * 80 + 20
+      }))
+    },
+    {
+      name: "Product B", 
+      values: axes.map(axis => ({
+        axis,
+        value: Math.random() * 80 + 20
+      }))
+    },
+    {
+      name: "Product C",
+      values: axes.map(axis => ({
+        axis,
+        value: Math.random() * 80 + 20
+      }))
+    }
+  ];
+}
+
+function generateHeatmapData() {
+  const rows = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  const columns = ["00:00", "04:00", "08:00", "12:00", "16:00", "20:00"];
+  const data = [];
+  
+  rows.forEach(row => {
+    columns.forEach(column => {
+      const isWeekend = row === "Saturday" || row === "Sunday";
+      const isBusinessHours = column === "08:00" || column === "12:00" || column === "16:00";
+      let baseValue = Math.random() * 50;
+      
+      if (!isWeekend && isBusinessHours) {
+        baseValue += 30; // Higher activity during business hours on weekdays
+      }
+      
+      data.push({
+        row,
+        column,
+        value: Math.round(baseValue)
+      });
+    });
+  });
+  
+  return data;
+}
+
+// Advanced chart data generators
+function generateSunburstData() {
+  return {
+    name: "Organization",
+    children: [
+      {
+        name: "Engineering",
+        children: [
+          { name: "Frontend", value: 45 },
+          { name: "Backend", value: 35 },
+          { name: "DevOps", value: 20 },
+          { name: "QA", value: 15 }
+        ]
+      },
+      {
+        name: "Product",
+        children: [
+          { name: "Design", value: 25 },
+          { name: "Research", value: 20 },
+          { name: "Strategy", value: 15 }
+        ]
+      },
+      {
+        name: "Marketing",
+        children: [
+          { name: "Digital", value: 30 },
+          { name: "Content", value: 20 },
+          { name: "Analytics", value: 15 }
+        ]
+      }
+    ]
+  };
+}
+
+function generateParallelCoordinatesData() {
+  const products = ['Product A', 'Product B', 'Product C', 'Product D', 'Product E'];
+  return products.map((product, i) => ({
+    name: product,
+    price: Math.random() * 200 + 50,
+    quality: Math.random() * 10 + 1,
+    popularity: Math.random() * 10 + 1,
+    rating: Math.random() * 5 + 1,
+    sales: Math.random() * 1000 + 100
+  }));
+}
+
+function generateStreamData() {
+  const categories = ['Category A', 'Category B', 'Category C', 'Category D'];
+  const data = [];
+  
+  for (let month = 0; month < 12; month++) {
+    const date = new Date(2023, month, 1);
+    const dataPoint = { date };
+    
+    categories.forEach(category => {
+      dataPoint[category] = Math.random() * 50 + 10 + Math.sin(month * 0.5) * 20;
+    });
+    
+    data.push(dataPoint);
+  }
+  
+  return data;
+}
+
+function generateViolinData() {
+  const groups = ['Group A', 'Group B', 'Group C'];
+  return groups.map(group => {
+    const values = [];
+    const mean = Math.random() * 50 + 25;
+    const std = Math.random() * 10 + 5;
+    
+    // Generate normal distribution
+    for (let i = 0; i < 100; i++) {
+      let u = 0, v = 0;
+      while(u === 0) u = Math.random();
+      while(v === 0) v = Math.random();
+      const normal = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+      values.push(mean + normal * std);
+    }
+    
+    return {
+      category: group,
+      values: values
+    };
+  });
+}
+
+function generateNetworkData() {
+  const nodeCount = 15;
+  const nodes = [];
+  const links = [];
+  
+  // Generate nodes
+  for (let i = 0; i < nodeCount; i++) {
+    nodes.push({
+      id: `Node ${i + 1}`,
+      group: Math.floor(i / 5) + 1,
+      value: Math.random() * 20 + 5
+    });
+  }
+  
+  // Generate links
+  for (let i = 0; i < nodeCount * 1.5; i++) {
+    const source = Math.floor(Math.random() * nodeCount);
+    const target = Math.floor(Math.random() * nodeCount);
+    
+    if (source !== target) {
+      links.push({
+        source: `Node ${source + 1}`,
+        target: `Node ${target + 1}`,
+        value: Math.random() * 5 + 1
+      });
+    }
+  }
+  
+  return { nodes, links };
+}
+
 // Initialize charts
 function initializeCharts() {
   // Bar Chart
@@ -1169,6 +1646,124 @@ function initializeCharts() {
   const bubbleData = generateAnimatedBubbleData(8);
   animatedBubbleChart.setData(bubbleData).setPeriod(0);
 
+  // Treemap Chart
+  treemapChart = new TreemapChart('#treemap-chart', {
+    width: 600,
+    height: 400,
+    colorScheme: 'category10',
+    animation: true,
+    tooltips: true,
+    padding: 2
+  });
+  treemapChart.setData(generateTreemapData()).render();
+
+  // Gauge Chart
+  gaugeChart = new GaugeChart('#gauge-chart', {
+    width: 400,
+    height: 300,
+    colorScheme: 'traffic',
+    animation: true,
+    showValue: true,
+    showTicks: true
+  });
+  gaugeChart.setData(generateGaugeData()).render();
+
+  // Waterfall Chart
+  waterfallChart = new WaterfallChart('#waterfall-chart', {
+    width: 600,
+    height: 400,
+    colorScheme: 'default',
+    animation: true,
+    tooltips: true,
+    showConnectors: true,
+    showValues: true
+  });
+  waterfallChart.setData(generateWaterfallData()).render();
+
+  // Radar Chart
+  radarChart = new RadarChart('#radar-chart', {
+    width: 500,
+    height: 500,
+    colorScheme: 'category10',
+    levels: 5,
+    maxValue: 100,
+    animation: true,
+    tooltips: true,
+    legend: true
+  });
+  radarChart.setData(generateRadarData()).render();
+
+  // Heatmap Chart
+  heatmapChart = new HeatmapChart('#heatmap-chart', {
+    width: 600,
+    height: 400,
+    colorScheme: 'blues',
+    animation: true,
+    tooltips: true,
+    showValues: false
+  });
+  heatmapChart.setData(generateHeatmapData()).render();
+
+  // Sunburst Chart
+  sunburstChart = new SunburstChart('#sunburst-chart', {
+    width: 600,
+    height: 600,
+    colorScheme: 'category10',
+    animation: true,
+    tooltips: true
+  });
+  sunburstChart.setData(generateSunburstData()).render();
+
+  // Parallel Coordinates Chart
+  parallelCoordinatesChart = new ParallelCoordinatesChart('#parallel-coordinates-chart', {
+    width: 800,
+    height: 400,
+    colorScheme: 'category10',
+    animation: true,
+    tooltips: true,
+    brushing: true
+  });
+  parallelCoordinatesChart.setData(generateParallelCoordinatesData()).render();
+
+  // Stream Chart
+  streamChart = new StreamChart('#stream-chart', {
+    width: 800,
+    height: 400,
+    colorScheme: 'spectral',
+    animation: true,
+    tooltips: true,
+    legend: true,
+    curve: 'cardinal',
+    offset: 'wiggle'
+  });
+  streamChart.setData(generateStreamData()).render();
+
+  // Violin Chart
+  violinChart = new ViolinChart('#violin-chart', {
+    width: 600,
+    height: 400,
+    colorScheme: 'category10',
+    animation: true,
+    tooltips: true,
+    showBoxPlot: true,
+    showMedian: true
+  });
+  violinChart.setData(generateViolinData()).render();
+
+  // Network Chart
+  networkChart = new NetworkChart('#network-chart', {
+    width: 700,
+    height: 500,
+    colorScheme: 'category10',
+    animation: true,
+    tooltips: true,
+    showLabels: true,
+    nodeRadius: 8,
+    linkStrength: 0.1,
+    chargeStrength: -300
+  });
+  networkChart.setData(generateNetworkData()).render();
+
   // Update code examples
   updateCodeExamples();
 }
@@ -1194,6 +1789,20 @@ function updateCodeExamples() {
   document.getElementById('calendar-heatmap-code').textContent = calendarHeatmapChartCode;
   const bubbleCodeEl = document.getElementById('animated-bubble-code');
   if (bubbleCodeEl) bubbleCodeEl.textContent = animatedBubbleChartCode;
+  
+  // New chart code examples
+  document.getElementById('treemap-code').textContent = treemapChartCode;
+  document.getElementById('gauge-code').textContent = gaugeChartCode;
+  document.getElementById('waterfall-code').textContent = waterfallChartCode;
+  document.getElementById('radar-code').textContent = radarChartCode;
+  document.getElementById('heatmap-code').textContent = heatmapChartCode;
+  
+  // Advanced chart code examples
+  document.getElementById('sunburst-code').textContent = sunburstChartCode;
+  document.getElementById('parallel-coordinates-code').textContent = parallelCoordinatesChartCode;
+  document.getElementById('stream-code').textContent = streamChartCode;
+  document.getElementById('violin-code').textContent = violinChartCode;
+  document.getElementById('network-code').textContent = networkChartCode;
 }
 
 // Global functions for button interactions
@@ -1602,6 +2211,106 @@ window.pauseAnimatedBubbleChart = () => {
   }
 };
 
+// Treemap Chart controls
+window.updateTreemapChart = () => {
+  treemapChart.setData(generateTreemapData()).render();
+};
+
+window.changeTreemapColorScheme = () => {
+  const colorSchemes = ['category10', 'blues', 'greens', 'oranges', 'purples'];
+  const currentScheme = treemapChart.options.colorScheme;
+  const currentIndex = colorSchemes.indexOf(currentScheme);
+  const nextScheme = colorSchemes[(currentIndex + 1) % colorSchemes.length];
+  treemapChart.updateColorScheme(nextScheme);
+};
+
+window.toggleTreemapAnimation = () => {
+  treemapChart.options.animation = !treemapChart.options.animation;
+  treemapChart.render();
+};
+
+// Gauge Chart controls
+window.updateGaugeChart = () => {
+  gaugeChart.setData(generateGaugeData()).render();
+};
+
+window.changeGaugeColorScheme = () => {
+  const colorSchemes = ['traffic', 'blue', 'purple', 'green'];
+  const currentScheme = gaugeChart.options.colorScheme;
+  const currentIndex = colorSchemes.indexOf(currentScheme);
+  const nextScheme = colorSchemes[(currentIndex + 1) % colorSchemes.length];
+  gaugeChart.updateColorScheme(nextScheme);
+};
+
+window.toggleGaugeAnimation = () => {
+  gaugeChart.options.animation = !gaugeChart.options.animation;
+  gaugeChart.render();
+};
+
+// Waterfall Chart controls
+window.updateWaterfallChart = () => {
+  waterfallChart.setData(generateWaterfallData()).render();
+};
+
+window.changeWaterfallColorScheme = () => {
+  const colorSchemes = ['default', 'business', 'muted'];
+  const currentScheme = waterfallChart.options.colorScheme;
+  const currentIndex = colorSchemes.indexOf(currentScheme);
+  const nextScheme = colorSchemes[(currentIndex + 1) % colorSchemes.length];
+  waterfallChart.updateColorScheme(nextScheme);
+};
+
+window.toggleWaterfallAnimation = () => {
+  waterfallChart.options.animation = !waterfallChart.options.animation;
+  waterfallChart.render();
+};
+
+// Radar Chart controls
+window.updateRadarChart = () => {
+  radarChart.setData(generateRadarData()).render();
+};
+
+window.changeRadarColorScheme = () => {
+  const colorSchemes = ['category10', 'blues', 'greens', 'oranges', 'purples'];
+  const currentScheme = radarChart.options.colorScheme;
+  const currentIndex = colorSchemes.indexOf(currentScheme);
+  const nextScheme = colorSchemes[(currentIndex + 1) % colorSchemes.length];
+  radarChart.updateColorScheme(nextScheme);
+};
+
+window.toggleRadarAnimation = () => {
+  radarChart.options.animation = !radarChart.options.animation;
+  radarChart.render();
+};
+
+window.toggleRadarLegend = () => {
+  radarChart.options.legend = !radarChart.options.legend;
+  radarChart.render();
+};
+
+// Heatmap Chart controls
+window.updateHeatmapChart = () => {
+  heatmapChart.setData(generateHeatmapData()).render();
+};
+
+window.changeHeatmapColorScheme = () => {
+  const colorSchemes = ['blues', 'greens', 'reds', 'oranges', 'purples', 'viridis', 'plasma', 'inferno'];
+  const currentScheme = heatmapChart.options.colorScheme;
+  const currentIndex = colorSchemes.indexOf(currentScheme);
+  const nextScheme = colorSchemes[(currentIndex + 1) % colorSchemes.length];
+  heatmapChart.updateColorScheme(nextScheme);
+};
+
+window.toggleHeatmapAnimation = () => {
+  heatmapChart.options.animation = !heatmapChart.options.animation;
+  heatmapChart.render();
+};
+
+window.toggleHeatmapValues = () => {
+  heatmapChart.options.showValues = !heatmapChart.options.showValues;
+  heatmapChart.render();
+};
+
 // Copy to clipboard function
 window.copyToClipboard = (text) => {
   navigator.clipboard.writeText(text).then(() => {
@@ -1630,6 +2339,134 @@ window.sankeyChartCode = sankeyChartCode;
 window.radialStackedBarChartCode = radialStackedBarChartCode;
 window.calendarHeatmapChartCode = calendarHeatmapChartCode;
 window.animatedBubbleChartCode = animatedBubbleChartCode;
+window.treemapChartCode = treemapChartCode;
+window.gaugeChartCode = gaugeChartCode;
+window.waterfallChartCode = waterfallChartCode;
+window.radarChartCode = radarChartCode;
+window.heatmapChartCode = heatmapChartCode;
+
+// Advanced Chart Controls
+
+// Sunburst Chart controls
+window.updateSunburstChart = () => {
+  sunburstChart.setData(generateSunburstData()).render();
+};
+
+window.changeSunburstColorScheme = () => {
+  const colorSchemes = ['category10', 'blues', 'greens', 'oranges', 'purples'];
+  const currentScheme = sunburstChart.options.colorScheme;
+  const currentIndex = colorSchemes.indexOf(currentScheme);
+  const nextScheme = colorSchemes[(currentIndex + 1) % colorSchemes.length];
+  sunburstChart.updateColorScheme(nextScheme);
+};
+
+window.toggleSunburstAnimation = () => {
+  sunburstChart.options.animation = !sunburstChart.options.animation;
+  sunburstChart.render();
+};
+
+window.resetSunburstZoom = () => {
+  if (sunburstChart.resetZoom) {
+    sunburstChart.resetZoom();
+  }
+};
+
+// Parallel Coordinates Chart controls
+window.updateParallelCoordinatesChart = () => {
+  parallelCoordinatesChart.setData(generateParallelCoordinatesData()).render();
+};
+
+window.changeParallelCoordinatesColorScheme = () => {
+  const colorSchemes = ['category10', 'blues', 'greens', 'oranges', 'purples'];
+  const currentScheme = parallelCoordinatesChart.options.colorScheme;
+  const currentIndex = colorSchemes.indexOf(currentScheme);
+  const nextScheme = colorSchemes[(currentIndex + 1) % colorSchemes.length];
+  parallelCoordinatesChart.updateColorScheme(nextScheme);
+};
+
+window.toggleParallelCoordinatesAnimation = () => {
+  parallelCoordinatesChart.options.animation = !parallelCoordinatesChart.options.animation;
+  parallelCoordinatesChart.render();
+};
+
+window.clearParallelCoordinatesBrushes = () => {
+  if (parallelCoordinatesChart.clearBrushes) {
+    parallelCoordinatesChart.clearBrushes();
+  }
+};
+
+// Stream Chart controls
+window.updateStreamChart = () => {
+  streamChart.setData(generateStreamData()).render();
+};
+
+window.changeStreamColorScheme = () => {
+  const colorSchemes = ['spectral', 'blues', 'greens', 'oranges', 'purples'];
+  const currentScheme = streamChart.options.colorScheme;
+  const currentIndex = colorSchemes.indexOf(currentScheme);
+  const nextScheme = colorSchemes[(currentIndex + 1) % colorSchemes.length];
+  streamChart.updateColorScheme(nextScheme);
+};
+
+window.toggleStreamAnimation = () => {
+  streamChart.options.animation = !streamChart.options.animation;
+  streamChart.render();
+};
+
+window.changeStreamOffset = () => {
+  const offsets = ['wiggle', 'silhouette', 'expand', 'diverging'];
+  const currentOffset = streamChart.options.offset;
+  const currentIndex = offsets.indexOf(currentOffset);
+  const nextOffset = offsets[(currentIndex + 1) % offsets.length];
+  streamChart.updateOptions({ offset: nextOffset });
+  streamChart.render();
+};
+
+// Violin Chart controls
+window.updateViolinChart = () => {
+  violinChart.setData(generateViolinData()).render();
+};
+
+window.changeViolinColorScheme = () => {
+  const colorSchemes = ['category10', 'blues', 'greens', 'oranges', 'purples'];
+  const currentScheme = violinChart.options.colorScheme;
+  const currentIndex = colorSchemes.indexOf(currentScheme);
+  const nextScheme = colorSchemes[(currentIndex + 1) % colorSchemes.length];
+  violinChart.updateColorScheme(nextScheme);
+};
+
+window.toggleViolinAnimation = () => {
+  violinChart.options.animation = !violinChart.options.animation;
+  violinChart.render();
+};
+
+window.toggleViolinBoxPlot = () => {
+  violinChart.options.showBoxPlot = !violinChart.options.showBoxPlot;
+  violinChart.render();
+};
+
+// Network Chart controls
+window.updateNetworkChart = () => {
+  networkChart.setData(generateNetworkData()).render();
+};
+
+window.changeNetworkColorScheme = () => {
+  const colorSchemes = ['category10', 'blues', 'greens', 'oranges', 'purples'];
+  const currentScheme = networkChart.options.colorScheme;
+  const currentIndex = colorSchemes.indexOf(currentScheme);
+  const nextScheme = colorSchemes[(currentIndex + 1) % colorSchemes.length];
+  networkChart.updateColorScheme(nextScheme);
+};
+
+window.toggleNetworkAnimation = () => {
+  networkChart.options.animation = !networkChart.options.animation;
+  networkChart.render();
+};
+
+window.toggleNetworkLabels = () => {
+  networkChart.options.showLabels = !networkChart.options.showLabels;
+  networkChart.render();
+};
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {

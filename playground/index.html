@@ -288,7 +288,7 @@
     <div class="header">
         <div class="container">
             <h1>D3 Charts Viz Library</h1>
-            <p class="subtitle">Interactive playground showcasing 12 different chart types</p>
+            <p class="subtitle">Interactive playground showcasing 30 different chart types</p>
         </div>
     </div>
 
@@ -655,10 +655,187 @@
                      <pre id="animated-bubble-code"></pre>
                  </div>
              </div>
-        </div>
-    </div>
 
-    <div class="footer">
+             <!-- Treemap Chart -->
+             <div class="chart-card">
+                 <div class="chart-title">🗂️ Treemap Chart</div>
+                 <div id="treemap-chart" class="chart-container">
+                     <div class="loading"></div>
+                 </div>
+                 <div class="controls">
+                     <button class="btn" onclick="updateTreemapChart()">🔄 Update Data</button>
+                     <button class="btn secondary" onclick="changeTreemapColorScheme()">🎨 Change Colors</button>
+                     <button class="btn secondary" onclick="toggleTreemapAnimation()">✨ Toggle Animation</button>
+                 </div>
+                 <div class="code-example">
+                     <button class="copy-btn" onclick="copyToClipboard(treemapChartCode)">Copy</button>
+                     <pre id="treemap-code"></pre>
+                 </div>
+             </div>
+
+             <!-- Gauge Chart -->
+             <div class="chart-card">
+                 <div class="chart-title">⏲️ Gauge Chart</div>
+                 <div id="gauge-chart" class="chart-container">
+                     <div class="loading"></div>
+                 </div>
+                 <div class="controls">
+                     <button class="btn" onclick="updateGaugeChart()">🔄 Update Data</button>
+                     <button class="btn secondary" onclick="changeGaugeColorScheme()">🎨 Change Colors</button>
+                     <button class="btn secondary" onclick="toggleGaugeAnimation()">✨ Toggle Animation</button>
+                 </div>
+                 <div class="code-example">
+                     <button class="copy-btn" onclick="copyToClipboard(gaugeChartCode)">Copy</button>
+                     <pre id="gauge-code"></pre>
+                 </div>
+             </div>
+
+             <!-- Waterfall Chart -->
+             <div class="chart-card">
+                 <div class="chart-title">💧 Waterfall Chart</div>
+                 <div id="waterfall-chart" class="chart-container">
+                     <div class="loading"></div>
+                 </div>
+                 <div class="controls">
+                     <button class="btn" onclick="updateWaterfallChart()">🔄 Update Data</button>
+                     <button class="btn secondary" onclick="changeWaterfallColorScheme()">🎨 Change Colors</button>
+                     <button class="btn secondary" onclick="toggleWaterfallAnimation()">✨ Toggle Animation</button>
+                 </div>
+                 <div class="code-example">
+                     <button class="copy-btn" onclick="copyToClipboard(waterfallChartCode)">Copy</button>
+                     <pre id="waterfall-code"></pre>
+                 </div>
+             </div>
+
+             <!-- Radar Chart -->
+             <div class="chart-card">
+                 <div class="chart-title">🕸️ Radar Chart</div>
+                 <div id="radar-chart" class="chart-container">
+                     <div class="loading"></div>
+                 </div>
+                 <div class="controls">
+                     <button class="btn" onclick="updateRadarChart()">🔄 Update Data</button>
+                     <button class="btn secondary" onclick="changeRadarColorScheme()">🎨 Change Colors</button>
+                     <button class="btn secondary" onclick="toggleRadarAnimation()">✨ Toggle Animation</button>
+                     <button class="btn secondary" onclick="toggleRadarLegend()">📋 Toggle Legend</button>
+                 </div>
+                 <div class="code-example">
+                     <button class="copy-btn" onclick="copyToClipboard(radarChartCode)">Copy</button>
+                     <pre id="radar-code"></pre>
+                 </div>
+             </div>
+
+             <!-- Heatmap Chart -->
+             <div class="chart-card">
+                 <div class="chart-title">🔥 Heatmap Chart</div>
+                 <div id="heatmap-chart" class="chart-container">
+                     <div class="loading"></div>
+                 </div>
+                 <div class="controls">
+                     <button class="btn" onclick="updateHeatmapChart()">🔄 Update Data</button>
+                     <button class="btn secondary" onclick="changeHeatmapColorScheme()">🎨 Change Colors</button>
+                     <button class="btn secondary" onclick="toggleHeatmapAnimation()">✨ Toggle Animation</button>
+                     <button class="btn secondary" onclick="toggleHeatmapValues()">🔢 Toggle Values</button>
+                 </div>
+                 <div class="code-example">
+                     <button class="copy-btn" onclick="copyToClipboard(heatmapChartCode)">Copy</button>
+                     <pre id="heatmap-code"></pre>
+                 </div>
+             </div>
+
+             <!-- Sunburst Chart -->
+             <div class="chart-card">
+                 <div class="chart-title">⭐ Sunburst Chart</div>
+                 <div id="sunburst-chart" class="chart-container">
+                     <div class="loading"></div>
+                 </div>
+                 <div class="controls">
+                     <button class="btn" onclick="updateSunburstChart()">🔄 Update Data</button>
+                     <button class="btn secondary" onclick="changeSunburstColorScheme()">🎨 Change Colors</button>
+                     <button class="btn secondary" onclick="toggleSunburstAnimation()">✨ Toggle Animation</button>
+                     <button class="btn secondary" onclick="resetSunburstZoom()">🔍 Reset Zoom</button>
+                 </div>
+                 <div class="code-example">
+                     <button class="copy-btn" onclick="copyToClipboard(sunburstChartCode)">Copy</button>
+                     <pre id="sunburst-code"></pre>
+                 </div>
+             </div>
+
+             <!-- Parallel Coordinates Chart -->
+             <div class="chart-card">
+                 <div class="chart-title">📊 Parallel Coordinates Chart</div>
+                 <div id="parallel-coordinates-chart" class="chart-container">
+                     <div class="loading"></div>
+                 </div>
+                 <div class="controls">
+                     <button class="btn" onclick="updateParallelCoordinatesChart()">🔄 Update Data</button>
+                     <button class="btn secondary" onclick="changeParallelCoordinatesColorScheme()">🎨 Change Colors</button>
+                     <button class="btn secondary" onclick="toggleParallelCoordinatesAnimation()">✨ Toggle Animation</button>
+                     <button class="btn secondary" onclick="clearParallelCoordinatesBrushes()">🧹 Clear Brushes</button>
+                 </div>
+                 <div class="code-example">
+                     <button class="copy-btn" onclick="copyToClipboard(parallelCoordinatesChartCode)">Copy</button>
+                     <pre id="parallel-coordinates-code"></pre>
+                 </div>
+             </div>
+
+             <!-- Stream Chart -->
+             <div class="chart-card">
+                 <div class="chart-title">🌊 Stream Chart</div>
+                 <div id="stream-chart" class="chart-container">
+                     <div class="loading"></div>
+                 </div>
+                 <div class="controls">
+                     <button class="btn" onclick="updateStreamChart()">🔄 Update Data</button>
+                     <button class="btn secondary" onclick="changeStreamColorScheme()">🎨 Change Colors</button>
+                     <button class="btn secondary" onclick="toggleStreamAnimation()">✨ Toggle Animation</button>
+                     <button class="btn secondary" onclick="changeStreamOffset()">📐 Change Offset</button>
+                 </div>
+                 <div class="code-example">
+                     <button class="copy-btn" onclick="copyToClipboard(streamChartCode)">Copy</button>
+                     <pre id="stream-code"></pre>
+                 </div>
+             </div>
+
+             <!-- Violin Chart -->
+             <div class="chart-card">
+                 <div class="chart-title">🎻 Violin Chart</div>
+                 <div id="violin-chart" class="chart-container">
+                     <div class="loading"></div>
+                 </div>
+                 <div class="controls">
+                     <button class="btn" onclick="updateViolinChart()">🔄 Update Data</button>
+                     <button class="btn secondary" onclick="changeViolinColorScheme()">🎨 Change Colors</button>
+                     <button class="btn secondary" onclick="toggleViolinAnimation()">✨ Toggle Animation</button>
+                     <button class="btn secondary" onclick="toggleViolinBoxPlot()">📦 Toggle Box Plot</button>
+                 </div>
+                 <div class="code-example">
+                     <button class="copy-btn" onclick="copyToClipboard(violinChartCode)">Copy</button>
+                     <pre id="violin-code"></pre>
+                 </div>
+             </div>
+
+             <!-- Network Chart -->
+             <div class="chart-card">
+                 <div class="chart-title">🕸️ Network Chart</div>
+                 <div id="network-chart" class="chart-container">
+                     <div class="loading"></div>
+                 </div>
+                 <div class="controls">
+                     <button class="btn" onclick="updateNetworkChart()">🔄 Update Data</button>
+                     <button class="btn secondary" onclick="changeNetworkColorScheme()">🎨 Change Colors</button>
+                     <button class="btn secondary" onclick="toggleNetworkAnimation()">✨ Toggle Animation</button>
+                     <button class="btn secondary" onclick="toggleNetworkLabels()">🏷️ Toggle Labels</button>
+                 </div>
+                 <div class="code-example">
+                     <button class="copy-btn" onclick="copyToClipboard(networkChartCode)">Copy</button>
+                     <pre id="network-code"></pre>
+                 </div>
+             </div>
+         </div>
+     </div>
+
+     <div class="footer">
         <div class="container">
             <p>Built with ❤️ using <a href="https://www.npmjs.com/package/d3-charts-viz-library" target="_blank">d3-charts-viz-library</a></p>
             <p>Powered by D3.js • Open Source • MIT License</p>

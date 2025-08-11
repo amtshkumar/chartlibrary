@@ -19,6 +19,16 @@ export { default as SpiralChart } from './charts/SpiralChart.js';
 export { default as RadialStackedBarChart } from './charts/RadialStackedBarChart.js';
 export { default as CalendarHeatmapChart } from './charts/CalendarHeatmapChart.js';
 export { default as AnimatedBubbleChart } from './charts/AnimatedBubbleChart.js';
+export { default as TreemapChart } from './charts/TreemapChart.js';
+export { default as GaugeChart } from './charts/GaugeChart.js';
+export { default as WaterfallChart } from './charts/WaterfallChart.js';
+export { default as RadarChart } from './charts/RadarChart.js';
+export { default as HeatmapChart } from './charts/HeatmapChart.js';
+export { default as SunburstChart } from './charts/SunburstChart.js';
+export { default as ParallelCoordinatesChart } from './charts/ParallelCoordinatesChart.js';
+export { default as StreamChart } from './charts/StreamChart.js';
+export { default as ViolinChart } from './charts/ViolinChart.js';
+export { default as NetworkChart } from './charts/NetworkChart.js';
 
 // Utility functions
 export * from './utils/index.js';
