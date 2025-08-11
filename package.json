@@ -1,7 +1,7 @@
 {
   "name": "d3-charts-viz-library",
   "type": "module",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "A comprehensive D3-based chart library with customizable charts and graphs",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",

@@ -618,23 +618,43 @@
                 </div>
             </div>
 
-            <!-- Calendar Heatmap Chart -->
-            <div class="chart-card">
-                <div class="chart-title">📅 Calendar Heatmap Chart</div>
-                <div id="calendar-heatmap-chart" class="chart-container">
-                    <div class="loading"></div>
-                </div>
-                <div class="controls">
-                    <button class="btn" onclick="updateCalendarHeatmapChart()">🔄 Update Data</button>
-                    <button class="btn secondary" onclick="changeCalendarColorScheme()">🎨 Change Color Scheme</button>
-                    <button class="btn secondary" onclick="changeCalendarYear()">📅 Change Year</button>
-                    <button class="btn secondary" onclick="toggleCalendarAnimation()">✨ Toggle Animation</button>
-                </div>
-                <div class="code-example">
-                    <button class="copy-btn" onclick="copyToClipboard(calendarHeatmapChartCode)">Copy</button>
-                    <pre id="calendar-heatmap-code"></pre>
-                </div>
-            </div>
+             <!-- Calendar Heatmap Chart -->
+             <div class="chart-card">
+                 <div class="chart-title">📅 Calendar Heatmap Chart</div>
+                 <div id="calendar-heatmap-chart" class="chart-container">
+                     <div class="loading"></div>
+                 </div>
+                 <div class="controls">
+                     <button class="btn" onclick="updateCalendarHeatmapChart()">🔄 Update Data</button>
+                     <button class="btn secondary" onclick="changeCalendarColorScheme()">🎨 Change Color Scheme</button>
+                     <button class="btn secondary" onclick="changeCalendarYear()">📅 Change Year</button>
+                     <button class="btn secondary" onclick="toggleCalendarAnimation()">✨ Toggle Animation</button>
+                 </div>
+                 <div class="code-example">
+                     <button class="copy-btn" onclick="copyToClipboard(calendarHeatmapChartCode)">Copy</button>
+                     <pre id="calendar-heatmap-code"></pre>
+                 </div>
+             </div>
+
+             <!-- Animated Bubble Chart -->
+             <div class="chart-card">
+                 <div class="chart-title">🫧 Animated Bubble Chart</div>
+                 <div id="animated-bubble-chart" class="chart-container">
+                     <div class="loading"></div>
+                 </div>
+                 <div class="controls">
+                     <button class="btn" onclick="updateAnimatedBubbleChart()">🔄 Update Data</button>
+                     <button class="btn secondary" onclick="playAnimatedBubbleChart()">▶️ Play</button>
+                     <button class="btn secondary" onclick="pauseAnimatedBubbleChart()">⏸️ Pause</button>
+                     <button class="btn secondary" onclick="prevAnimatedPeriod()">⏮️ Prev Period</button>
+                     <button class="btn secondary" onclick="nextAnimatedPeriod()">⏭️ Next Period</button>
+                     <button class="btn secondary" onclick="toggleAnimatedBubbleLegend()">📋 Toggle Legend</button>
+                 </div>
+                 <div class="code-example">
+                     <button class="copy-btn" onclick="copyToClipboard(animatedBubbleChartCode)">Copy</button>
+                     <pre id="animated-bubble-code"></pre>
+                 </div>
+             </div>
         </div>
     </div>
 

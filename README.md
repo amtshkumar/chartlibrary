@@ -1,10 +1,10 @@
 # D3 Charts Visualization Library
 
-A comprehensive, production-ready D3-based chart library with 18+ chart types for creating stunning data visualizations.
+A comprehensive, production-ready D3-based chart library with 19+ chart types for creating stunning data visualizations.
 
 ## 🚀 Features
 
-- 🎯 **18+ Chart Types**: From basic Bar/Line charts to advanced Spiral, Force-Directed, Calendar Heatmap, and Radial Stacked visualizations
+- 🎯 **19+ Chart Types**: From basic Bar/Line charts to advanced Spiral, Force-Directed, Calendar Heatmap, Animated Bubble, and Radial Stacked visualizations
 - 🎨 **Highly Customizable**: Extensive configuration options for colors, animations, and styling
 - 📱 **Responsive Design**: Charts automatically adapt to container size changes
 - 🖱️ **Interactive**: Built-in hover effects, tooltips, zoom, and click handlers
@@ -88,7 +88,7 @@ chart.setData(data).render();
 
 ## 📊 Chart Types
 
-The library includes 18+ chart types, from basic visualizations to advanced animated charts:
+The library includes 19+ chart types, from basic visualizations to advanced animated charts:
 
 ### 📊 Basic Charts
 
@@ -498,6 +498,44 @@ const data = [
 calendarChart.setData(data).render();
 ```
 
+#### Animated Bubble Chart
+Time-based animated bubble chart with smooth transitions between periods.
+
+```javascript
+import { AnimatedBubbleChart } from 'd3-charts-viz-library';
+
+const animatedBubbleChart = new AnimatedBubbleChart('#container', {
+  width: 900,
+  height: 600,
+  xLabel: 'Gain Realized',
+  yLabel: 'Tax Due',
+  timeField: 'period',
+  xField: 'x',
+  yField: 'y',
+  sizeField: 'size',
+  categoryField: 'category',
+  animated: true,
+  showLegend: true,
+  duration: 750
+});
+
+const bubbleData = [
+  // Period 0
+  { id: 'stock', category: 'Stock', period: 0, x: 10000, y: 2000, size: 500000 },
+  { id: 'realestate', category: 'Real Estate', period: 0, x: 15000, y: 3000, size: 1000000 },
+  { id: 'crypto', category: 'Crypto', period: 0, x: 4000, y: 1200, size: 150000 },
+  // Period 1
+  { id: 'stock', category: 'Stock', period: 1, x: 12000, y: 2400, size: 540000 },
+  { id: 'realestate', category: 'Real Estate', period: 1, x: 16500, y: 3300, size: 1050000 },
+  { id: 'crypto', category: 'Crypto', period: 1, x: 5200, y: 1560, size: 172000 }
+];
+
+animatedBubbleChart.setData(bubbleData).setPeriod(0);
+
+// Animate through periods
+animatedBubbleChart.setPeriod(1); // Switch to period 1 with smooth animation
+```
+
 ## Multi-Series Charts
 
 ### Multi-Line Chart
@@ -662,7 +700,31 @@ This library has undergone comprehensive testing and bug fixes to ensure product
 
 ## Changelog
 
-### v1.0.15 (Latest)
+### v1.0.16 (Latest)
+- ✨ **NEW**: Added AnimatedBubbleChart with time-based smooth animations
+  - Generic time-aware bubble chart for comparing two numeric metrics with bubble size
+  - Smooth animated transitions between time periods with configurable duration
+  - Interactive play/pause controls for automatic period animation
+  - Stable axes with precomputed domains for consistent scaling across periods
+  - Configurable data fields: x, y, size, category, time period, and unique ID
+  - Beautiful bubble animations with size transitions and position morphing
+  - Period watermark display and interactive legend support
+- 🎮 **ENHANCED**: Interactive playground with 14 chart types
+  - Added AnimatedBubbleChart to playground with full interactive controls
+  - New controls: Update Data, Play/Pause Animation, Prev/Next Period, Toggle Legend
+  - Realistic multi-period data generator with growth patterns and category drift
+  - Copy-to-clipboard functionality for complete code examples
+- 🔧 **IMPROVED**: Animation performance and smoothness
+  - Optimized render method to avoid clearing entire chart area on period changes
+  - Enhanced bubble transitions with separate circle radius and position animations
+  - Better text label interpolation with smooth value transitions
+  - Improved exit animations with gradual bubble shrinking
+- 📚 **UPDATED**: Comprehensive documentation and examples
+  - Complete README section with AnimatedBubbleChart usage examples
+  - Updated chart count from 18+ to 19+ chart types
+  - Added sample code with time-series bubble data structure
+
+### v1.0.15
 - ✨ **NEW**: Added CalendarHeatmapChart with GitHub-style calendar visualization
   - Beautiful calendar grid showing activity patterns over a full year
   - Four color schemes: green (GitHub style), blue, purple, and orange

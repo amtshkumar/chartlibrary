@@ -18,6 +18,7 @@ export { default as FlowContainersChart } from './charts/FlowContainersChart.js'
 export { default as SpiralChart } from './charts/SpiralChart.js';
 export { default as RadialStackedBarChart } from './charts/RadialStackedBarChart.js';
 export { default as CalendarHeatmapChart } from './charts/CalendarHeatmapChart.js';
+export { default as AnimatedBubbleChart } from './charts/AnimatedBubbleChart.js';
 
 // Utility functions
 export * from './utils/index.js';

@@ -18,12 +18,13 @@ import {
   SpiralChart,
   RadialStackedBarChart,
   CalendarHeatmapChart,
+  AnimatedBubbleChart,
   DataUtils,
   ColorUtils
 } from 'd3-charts-viz-library';
 
 // Global chart instances
-let barChart, lineChart, pieChart, donutChart, scatterPlot, areaChart, histogram, sankeyChart, liquidFillChart, radialRemainderChart, chordDiagramChart, forceDirectedChart, animatedBumpChart, radialTimelineChart, flowContainersChart, spiralChart, radialStackedBarChart, calendarHeatmapChart;
+let barChart, lineChart, pieChart, donutChart, scatterPlot, areaChart, histogram, sankeyChart, liquidFillChart, radialRemainderChart, chordDiagramChart, forceDirectedChart, animatedBumpChart, radialTimelineChart, flowContainersChart, spiralChart, radialStackedBarChart, calendarHeatmapChart, animatedBubbleChart;
 let isMultiSeries = false;
 let showTrendLine = false;
 let showDensity = false;
@@ -425,6 +426,32 @@ const data = [
 
 calendarHeatmapChart.setData(data).render();`;
 
+const animatedBubbleChartCode = `const animatedBubbleChart = new AnimatedBubbleChart('#animated-bubble-chart', {
+  width: 900,
+  height: 600,
+  xLabel: 'Gain Realized',
+  yLabel: 'Tax Due',
+  timeField: 'period',
+  xField: 'x',
+  yField: 'y',
+  sizeField: 'size',
+  categoryField: 'category',
+  animated: true
+});
+
+const data = [
+  // period 0
+  { id: 'a1', category: 'Stock', period: 0, x: 10000, y: 2000, size: 500000 },
+  { id: 'a2', category: 'Real Estate', period: 0, x: 15000, y: 3000, size: 1000000 },
+  { id: 'a3', category: 'Crypto', period: 0, x: 4000, y: 1200, size: 150000 },
+  // period 1
+  { id: 'a1', category: 'Stock', period: 1, x: 12000, y: 2400, size: 540000 },
+  { id: 'a2', category: 'Real Estate', period: 1, x: 16500, y: 3300, size: 1050000 },
+  { id: 'a3', category: 'Crypto', period: 1, x: 5200, y: 1560, size: 172000 }
+];
+
+animatedBubbleChart.setData(data).setPeriod(0);`;
+
 // Data generators
 function generateBarData() {
   const labels = ['Category A', 'Category B', 'Category C', 'Category D', 'Category E'];
@@ -487,6 +514,31 @@ function generateHistogramData() {
     const normal = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
     data.push(normal * 15 + 50);
   }
+  return data;
+}
+
+// Animated Bubble Chart generator
+function generateAnimatedBubbleData(periods = 6, categories = ['Stock', 'Real Estate', 'Crypto', 'Bonds']) {
+  const data = [];
+  const ids = categories.map((c, i) => ({ id: `id-${i}`, category: c }));
+  ids.forEach(({ id, category }, idx) => {
+    const baseX = 8000 + idx * 3000 + Math.random() * 2000;
+    const baseY = 1500 + idx * 700 + Math.random() * 800;
+    const baseSize = 200000 + idx * 250000 + Math.random() * 150000;
+    for (let p = 0; p < periods; p++) {
+      const growth = 1 + p * (0.08 + Math.random() * 0.04);
+      const driftX = (Math.sin(p * 0.6 + idx) + Math.random() * 0.5) * 1200;
+      const driftY = (Math.cos(p * 0.5 + idx) + Math.random() * 0.5) * 600;
+      data.push({
+        id,
+        category,
+        period: p,
+        x: Math.max(0, baseX * growth + driftX),
+        y: Math.max(0, baseY * growth * 0.22 + driftY),
+        size: Math.max(1, baseSize * (0.9 + p * 0.12))
+      });
+    }
+  });
   return data;
 }
 
@@ -886,48 +938,17 @@ function generateRadialStackedBarData() {
 }
 
 function generateCalendarHeatmapData(year = 2024) {
+  const start = new Date(year, 0, 1);
+  const end = new Date(year, 11, 31);
+  const dayMs = 24 * 60 * 60 * 1000;
   const data = [];
-  const startDate = new Date(year, 0, 1);
-  const endDate = new Date(year, 11, 31);
-  
-  // Generate random activity data for the year
-  const currentDate = new Date(startDate);
-  while (currentDate <= endDate) {
-    // Create some patterns: higher activity on weekdays, some seasonal variation
-    const dayOfWeek = currentDate.getDay();
-    const month = currentDate.getMonth();
-    
-    let baseActivity = 0;
-    
-    // Weekend vs weekday pattern
-    if (dayOfWeek === 0 || dayOfWeek === 6) {
-      baseActivity = Math.random() * 5; // Lower weekend activity
-    } else {
-      baseActivity = Math.random() * 15 + 5; // Higher weekday activity
-    }
-    
-    // Seasonal variation (higher in middle months)
-    const seasonalMultiplier = 0.5 + 0.5 * Math.sin((month / 12) * 2 * Math.PI + Math.PI/2);
-    baseActivity *= seasonalMultiplier;
-    
-    // Add some random spikes
-    if (Math.random() < 0.1) {
-      baseActivity *= 2;
-    }
-    
-    // Some days have no activity
-    if (Math.random() < 0.2) {
-      baseActivity = 0;
-    }
-    
-    data.push({
-      date: new Date(currentDate),
-      value: Math.floor(baseActivity)
-    });
-    
-    currentDate.setDate(currentDate.getDate() + 1);
+  for (let d = new Date(start); d <= end; d = new Date(d.getTime() + dayMs)) {
+    const isWeekend = d.getDay() === 0 || d.getDay() === 6;
+    const seasonal = Math.sin((d.getMonth() / 12) * Math.PI * 2) * 10 + 15;
+    const noise = Math.random() * 6;
+    const value = Math.max(0, Math.round((isWeekend ? 0.6 : 1) * (seasonal + noise)));
+    data.push({ date: new Date(d), value });
   }
-  
   return data;
 }
 
@@ -1131,6 +1152,23 @@ function initializeCharts() {
   });
   calendarHeatmapChart.setData(generateCalendarHeatmapData(2024)).render();
 
+  // Animated Bubble Chart
+  animatedBubbleChart = new AnimatedBubbleChart('#animated-bubble-chart', {
+    width: 900,
+    height: 600,
+    xLabel: 'Gain Realized',
+    yLabel: 'Tax Due',
+    timeField: 'period',
+    xField: 'x',
+    yField: 'y',
+    sizeField: 'size',
+    categoryField: 'category',
+    animated: true,
+    showLegend: true
+  });
+  const bubbleData = generateAnimatedBubbleData(8);
+  animatedBubbleChart.setData(bubbleData).setPeriod(0);
+
   // Update code examples
   updateCodeExamples();
 }
@@ -1154,6 +1192,8 @@ function updateCodeExamples() {
   document.getElementById('spiral-code').textContent = spiralChartCode;
   document.getElementById('radial-stacked-bar-code').textContent = radialStackedBarChartCode;
   document.getElementById('calendar-heatmap-code').textContent = calendarHeatmapChartCode;
+  const bubbleCodeEl = document.getElementById('animated-bubble-code');
+  if (bubbleCodeEl) bubbleCodeEl.textContent = animatedBubbleChartCode;
 }
 
 // Global functions for button interactions
@@ -1510,6 +1550,58 @@ window.toggleCalendarAnimation = () => {
   calendarHeatmapChart.render();
 };
 
+// Animated Bubble Chart controls
+window.updateAnimatedBubbleChart = () => {
+  const currentPeriods = 8;
+  animatedBubbleChart.setData(generateAnimatedBubbleData(currentPeriods)).setPeriod(0);
+};
+
+window.nextAnimatedPeriod = () => {
+  const timeField = animatedBubbleChart.options.timeField;
+  const maxPeriod = d3.max(animatedBubbleChart.data, d => d[timeField]);
+  const next = (animatedBubbleChart.currentPeriod + 1) % (maxPeriod + 1);
+  animatedBubbleChart.setPeriod(next);
+};
+
+window.prevAnimatedPeriod = () => {
+  const timeField = animatedBubbleChart.options.timeField;
+  const maxPeriod = d3.max(animatedBubbleChart.data, d => d[timeField]);
+  const prev = (animatedBubbleChart.currentPeriod - 1 + (maxPeriod + 1)) % (maxPeriod + 1);
+  animatedBubbleChart.setPeriod(prev);
+};
+
+window.toggleAnimatedBubbleLegend = () => {
+  animatedBubbleChart.options.showLegend = !animatedBubbleChart.options.showLegend;
+  animatedBubbleChart.render();
+};
+
+// Animation state for bubble chart
+let bubbleAnimationInterval = null;
+let isBubbleAnimationPlaying = false;
+
+window.playAnimatedBubbleChart = () => {
+  if (isBubbleAnimationPlaying) return;
+  
+  isBubbleAnimationPlaying = true;
+  const timeField = animatedBubbleChart.options.timeField;
+  const maxPeriod = d3.max(animatedBubbleChart.data, d => d[timeField]);
+  
+  bubbleAnimationInterval = setInterval(() => {
+    const next = (animatedBubbleChart.currentPeriod + 1) % (maxPeriod + 1);
+    animatedBubbleChart.setPeriod(next);
+  }, 1500); // Change period every 1.5 seconds
+};
+
+window.pauseAnimatedBubbleChart = () => {
+  if (!isBubbleAnimationPlaying) return;
+  
+  isBubbleAnimationPlaying = false;
+  if (bubbleAnimationInterval) {
+    clearInterval(bubbleAnimationInterval);
+    bubbleAnimationInterval = null;
+  }
+};
+
 // Copy to clipboard function
 window.copyToClipboard = (text) => {
   navigator.clipboard.writeText(text).then(() => {
@@ -1537,6 +1629,7 @@ window.histogramCode = histogramCode;
 window.sankeyChartCode = sankeyChartCode;
 window.radialStackedBarChartCode = radialStackedBarChartCode;
 window.calendarHeatmapChartCode = calendarHeatmapChartCode;
+window.animatedBubbleChartCode = animatedBubbleChartCode;
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
